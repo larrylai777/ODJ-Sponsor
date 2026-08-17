@@ -1,7 +1,8 @@
-/** Apple 式產品敘事提醒：頁尾收束為低干擾的深色資訊列；以細分隔線、台北黑體與平行法律連結，讓晨光日出品牌在內容結尾保持克制、明確。 */
+/** Apple 式產品敘事提醒：頁尾收束為低干擾的深色資訊列；以細分隔線、台北黑體、政策與合作品牌連結，讓晨光日出品牌在內容結尾保持克制、明確。 */
 
 const basePath = import.meta.env.BASE_URL;
 const facebookUrl = "https://www.facebook.com/share/19TwFNqfoG/?mibextid=wwXIfr";
+const bdNovelUrl = "https://larrylai777.github.io/bd-novel/";
 
 export default function SiteFooter() {
   return (
@@ -17,6 +18,9 @@ export default function SiteFooter() {
           </a>
           <a className="transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none" href={facebookUrl} target="_blank" rel="noreferrer">
             聯絡我們
+          </a>
+          <a className="transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none" href={bdNovelUrl} target="_blank" rel="noreferrer">
+            BÐ 小說 官方網站
           </a>
         </nav>
       </div>

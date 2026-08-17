@@ -17,6 +17,7 @@ import Project from "./pages/Project";
 const routePrefix = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
 const rallyBrandUrl = "https://store.line.me/search/zh-Hant?q=%E6%8B%89%E5%8A%9B%E4%B8%80%E6%96%B9";
 const calmCatChannelUrl = "https://youtube.com/@calm_cat_channel?si=1VLQJ9lvOkUBzsX7";
+const bdNovelUrl = "https://larrylai777.github.io/bd-novel/";
 
 function ExternalBrandLinks() {
   useEffect(() => {
@@ -41,17 +42,32 @@ function ExternalBrandLinks() {
           insertionPoint = brandLink;
         }
 
-        const hasCalmCatChannel = Array.from(container?.querySelectorAll<HTMLAnchorElement>("a") ?? []).some((link) => link.href === calmCatChannelUrl);
-        if (hasCalmCatChannel) return;
+        const existingCalmCatLink = Array.from(container?.querySelectorAll<HTMLAnchorElement>("a") ?? []).find((link) => link.href === calmCatChannelUrl);
+        if (existingCalmCatLink) {
+          insertionPoint = existingCalmCatLink;
+        } else {
+          const channelLink = document.createElement("a");
+          channelLink.href = calmCatChannelUrl;
+          channelLink.target = "_blank";
+          channelLink.rel = "noreferrer";
+          channelLink.dataset.calmCatChannel = "true";
+          channelLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
+          channelLink.textContent = "寧靜喵 YouTube 頻道 ↗";
+          insertionPoint.insertAdjacentElement("afterend", channelLink);
+          insertionPoint = channelLink;
+        }
 
-        const channelLink = document.createElement("a");
-        channelLink.href = calmCatChannelUrl;
-        channelLink.target = "_blank";
-        channelLink.rel = "noreferrer";
-        channelLink.dataset.calmCatChannel = "true";
-        channelLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
-        channelLink.textContent = "寧靜喵 YouTube 頻道 ↗";
-        insertionPoint.insertAdjacentElement("afterend", channelLink);
+        const hasBdNovelLink = Array.from(container?.querySelectorAll<HTMLAnchorElement>("a") ?? []).some((link) => link.href === bdNovelUrl);
+        if (hasBdNovelLink) return;
+
+        const bdNovelLink = document.createElement("a");
+        bdNovelLink.href = bdNovelUrl;
+        bdNovelLink.target = "_blank";
+        bdNovelLink.rel = "noreferrer";
+        bdNovelLink.dataset.bdNovel = "true";
+        bdNovelLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
+        bdNovelLink.textContent = "BÐ 小說 官方網站 ↗";
+        insertionPoint.insertAdjacentElement("afterend", bdNovelLink);
       });
     };
 
