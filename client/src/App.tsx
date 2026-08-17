@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useEffect } from "react";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -14,6 +15,34 @@ import Project from "./pages/Project";
  */
 
 const routePrefix = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
+const rallyBrandUrl = "https://store.line.me/search/zh-Hant?q=%E6%8B%89%E5%8A%9B%E4%B8%80%E6%96%B9";
+
+function MobileBrandLink() {
+  useEffect(() => {
+    const addBrandLink = () => {
+      const facebookLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href*="facebook.com"]')).filter((link) => link.closest("header") || link.closest(".fixed")?.className.includes("top-[52px]"));
+      facebookLinks.forEach((facebookLink) => {
+        const nextLink = facebookLink.nextElementSibling as HTMLAnchorElement | null;
+        if (nextLink?.getAttribute("data-rally-brand") === "true" || nextLink?.getAttribute("href") === rallyBrandUrl) return;
+        const brandLink = document.createElement("a");
+        brandLink.href = rallyBrandUrl;
+        brandLink.target = "_blank";
+        brandLink.rel = "noreferrer";
+        brandLink.dataset.rallyBrand = "true";
+        brandLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
+        brandLink.textContent = "拉力一方 LINE STORE ↗";
+        facebookLink.insertAdjacentElement("afterend", brandLink);
+      });
+    };
+
+    const observer = new MutationObserver(addBrandLink);
+    observer.observe(document.body, { childList: true, subtree: true });
+    addBrandLink();
+    return () => observer.disconnect();
+  }, []);
+
+  return null;
+}
 
 function SiteRouter() {
   return (
@@ -51,6 +80,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <SiteRouter />
+          <MobileBrandLink />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
