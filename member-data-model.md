@@ -20,13 +20,17 @@
 
 贊助紀錄的欄位包括 `projectId`、`projectTitle`、`planId`、`planName`、`amount`、`status`、`createdAt` 與 `updatedAt`。目前網站尚未有付款功能；此集合只用於保留登入會員在原型流程中建立的「支持意向」或未來由受控付款後端寫入的正式紀錄。前端不能自行把紀錄標示為已付款。
 
-### `users/{uid}/proposalDrafts/{proposalId}`
+### `proposals/{proposalId}`
 
-創作者提案欄位包含 `title`、`category`、`logline`、`description`、`creatorName`、`status`、`createdAt` 與 `updatedAt`。`status` 僅可為 `draft` 或 `submitted`。提交後資料可由平台管理介面或受控後端審閱；一般使用者不能讀取或修改他人的提案。
+每個會員作品以獨立文件保存，必填創作者欄位為 `authorUid`、`title`、`category`、`summary`、`description`、`creatorName`、`targetAmount`、`minimumSupportAmount`、`budgetUse`、`currentStage`、`nextMilestone`、`estimatedCompletion`、`status`、`createdAt` 與 `updatedAt`。`coverUrl` 可在草稿階段暫缺，但送審前建議填入。`totalRaised` 由受控付款後端計算，會員前端不可寫入。
+
+狀態依序為 `draft`、`under_review`、`revision_requested`、`published`、`paused` 與 `completed`。會員只可建立自己的 `draft`，並編輯 `draft` 或 `revision_requested`；送審只允許從 `draft`／`revision_requested` 轉為 `under_review`。核准公開、暫停、完成、退回原因及公開募得金額均由管理端或受控後端寫入。
+
+每份作品包含固定 `disbursementPlan`：啟動期 30%、核心製作期 40%、定稿／公開準備期 30%。資料模型保留未來用於受控撥付的欄位；第一版僅公開規則與進度，不讓瀏覽器建立付款、撥款、退款或改寫金額。
 
 ## 權限與資料治理
 
-Google 登入只作為 `request.auth.uid` 的身分基礎。所有會員資料與子集合都須以「擁有者 UID 等於已登入 UID」作為讀寫條件。角色、付款狀態、審核結果、退款、出貨資料及任何管理欄位必須由受控後端或管理工具寫入，不能交由瀏覽器客戶端宣告。
+Google 登入只作為 `request.auth.uid` 的身分基礎。所有會員資料與子集合都須以「擁有者 UID 等於已登入 UID」作為讀寫條件。角色、付款狀態、公開募得金額、審核結果、退款、撥付狀態及任何管理欄位必須由受控後端或管理工具寫入，不能交由瀏覽器客戶端宣告。`firestore-rules-v2.rules` 是本輪會員發布功能需發布的規則草案；發布前應在 Firebase Emulator 或 Rules Playground 驗證。
 
 在正式開放交易前，平台只允許登入、收藏、支持意向及創作者提案；不得收集收件地址、統一編號、銀行帳戶、信用卡或其他付款資料。隱私權政策與網站使用條款必須同步說明這些資料用途、保存方式與刪除聯絡窗口。
 

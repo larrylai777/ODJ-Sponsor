@@ -1,0 +1,63 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function ownsProposal() {
+      return signedIn() && resource.data.authorUid == request.auth.uid;
+    }
+
+    function publicProposal() {
+      return resource.data.status in ['published', 'paused', 'completed'];
+    }
+
+    function authorKeepsFundingFields() {
+      return request.resource.data.totalRaised == resource.data.totalRaised
+        && request.resource.data.disbursementPlan == resource.data.disbursementPlan
+        && request.resource.data.authorUid == resource.data.authorUid;
+    }
+
+    function authorEditsDraft() {
+      return request.resource.data.status == resource.data.status
+        && resource.data.status in ['draft', 'revision_requested'];
+    }
+
+    function authorSubmitsForReview() {
+      return resource.data.status in ['draft', 'revision_requested']
+        && request.resource.data.status == 'under_review';
+    }
+
+    match /users/{uid} {
+      allow read, create, update: if owns(uid);
+      allow delete: if false;
+    }
+
+    match /bookmarks/{uid}/items/{itemId} {
+      allow read, write: if owns(uid);
+    }
+
+    match /pledges/{uid}/records/{pledgeId} {
+      allow read: if owns(uid);
+      allow write: if false;
+    }
+
+    match /proposals/{proposalId} {
+      allow read: if publicProposal() || ownsProposal();
+      allow create: if signedIn()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.status == 'draft'
+        && request.resource.data.totalRaised == 0;
+      allow update: if ownsProposal()
+        && authorKeepsFundingFields()
+        && (authorEditsDraft() || authorSubmitsForReview());
+      allow delete: if ownsProposal() && resource.data.status in ['draft', 'revision_requested'];
+    }
+  }
+}
