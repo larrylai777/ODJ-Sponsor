@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import { OfficialPage, PrivacyPage, TermsPage } from "./pages/LegalPages";
 import Project from "./pages/Project";
 
@@ -18,6 +19,7 @@ function SiteRouter() {
   return (
     <Switch>
       <Route path={`${routePrefix}/`} component={Home} />
+      <Route path={`${routePrefix}/dashboard`} component={Dashboard} />
       <Route path={`${routePrefix}/project/:slug`} component={Project} />
       <Route path={`${routePrefix}/about`} component={OfficialPage} />
       <Route path={`${routePrefix}/privacy`} component={PrivacyPage} />
