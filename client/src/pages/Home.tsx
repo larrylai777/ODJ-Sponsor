@@ -11,6 +11,7 @@ const basePath = import.meta.env.BASE_URL;
 const heroImage = asset("odj-dawn-hero.jpg");
 const projectImage = asset("odj-dawn-project.jpg");
 const workshopImage = asset("odj-dawn-workshop.jpg");
+const ninthBirthCover = "/manus-storage/ninth-birth-cover_8fa0ecbf.png";
 
 const projects = [
   {
@@ -55,9 +56,24 @@ const projects = [
     badge: "保存計畫",
     description: "把一部值得重讀的小說，以校訂、製作與公開記錄的方式重新交到讀者手中。",
   },
+  {
+    id: "ninth-birth",
+    title: "第九次出生",
+    creator: "創作者提案中",
+    category: "科幻小說",
+    raised: "NT$ 0",
+    target: "NT$ 300,000",
+    supporters: "0",
+    days: "審核中 · 尚未開放支持",
+    progress: "0%",
+    image: ninthBirthCover,
+    imagePresentation: "portrait",
+    badge: "需贊助作品",
+    description: "以記憶、身份與重生為題的科幻小說提案。完整故事簡介、資金用途與完成時程將隨審核進度公開。",
+  },
 ];
 
-const projectFilters = ["全部作品", ...projects.map((project) => project.category)];
+const projectFilters = ["全部作品", ...Array.from(new Set(projects.map((project) => project.category)))];
 
 function Header({ onMenu }: { onMenu: () => void }) {
   return (
@@ -200,7 +216,7 @@ export default function Home() {
               <div className="mt-5 grid gap-5 md:grid-cols-2">
                 {supportingProjects.map((project) => (
                   <a key={project.id} href={`${basePath}project/${project.id}`} className="group overflow-hidden rounded-[28px] bg-[#f5f5f7]">
-                    <img src={project.image} alt={`${project.title} 專案封面`} className="aspect-[16/9] w-full object-cover transition duration-500 group-hover:scale-[1.025]" />
+                    <img src={project.image} alt={`${project.title} 專案封面`} className={`${project.imagePresentation === "portrait" ? "aspect-[3/4] bg-[#111318] object-contain" : "aspect-[16/9] object-cover"} w-full transition duration-500 group-hover:scale-[1.025]`} />
                     <div className="p-7">
                       <p className="odj-eyebrow text-[#f36b3b]">{project.badge}</p>
                       <p className="mt-3 text-sm text-[#6e6e73]">{project.category}</p>

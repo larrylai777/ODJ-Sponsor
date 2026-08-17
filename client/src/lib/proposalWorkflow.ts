@@ -8,6 +8,7 @@ export type ProposalFormValues = {
   summary: string;
   description: string;
   creatorName: string;
+  coverUrl: string;
   targetAmount: number;
   minimumSupportAmount: number;
   budgetUse: string;
@@ -15,6 +16,15 @@ export type ProposalFormValues = {
   nextMilestone: string;
   estimatedCompletion: string;
 };
+
+export const creatorSteps = [
+  { id: 1, label: "作品資料" },
+  { id: 2, label: "支持目標" },
+  { id: 3, label: "透明度" },
+  { id: 4, label: "檢查送審" },
+] as const;
+
+export type CreatorStep = (typeof creatorSteps)[number]["id"];
 
 export const milestonePlan = [
   { id: "activation", title: "提案核准與開工確認", percentage: 30 },
@@ -43,6 +53,7 @@ export function getSubmissionErrors(values: ProposalFormValues) {
     ["summary", "作品簡介"],
     ["description", "完整提案說明"],
     ["creatorName", "創作者顯示名稱"],
+    ["coverUrl", "封面圖片網址"],
     ["budgetUse", "款項用途"],
     ["currentStage", "目前製作階段"],
     ["nextMilestone", "下一個里程碑"],
@@ -55,10 +66,42 @@ export function getSubmissionErrors(values: ProposalFormValues) {
 
   if (!Number.isFinite(values.minimumSupportAmount) || values.minimumSupportAmount < 1) errors.push("最低支持金額須至少為 NT$ 1");
   if (!Number.isFinite(values.targetAmount) || values.targetAmount < values.minimumSupportAmount) errors.push("目標支持金額須大於或等於最低支持金額");
+  if (values.coverUrl && !isHttpsUrl(values.coverUrl)) errors.push("封面圖片網址須使用 HTTPS");
+
+  return errors;
+}
+
+export function getStepErrors(values: ProposalFormValues, step: CreatorStep) {
+  const errors: string[] = [];
+  const fieldsByStep: Record<CreatorStep, Array<[keyof ProposalFormValues, string]>> = {
+    1: [["title", "作品名稱"], ["category", "作品類型"], ["summary", "作品簡介"], ["description", "完整提案說明"], ["creatorName", "創作者顯示名稱"], ["coverUrl", "封面圖片網址"]],
+    2: [["budgetUse", "款項用途"]],
+    3: [["currentStage", "目前製作階段"], ["nextMilestone", "下一個里程碑"], ["estimatedCompletion", "預計完成時間"]],
+    4: [],
+  };
+
+  for (const [field, label] of fieldsByStep[step]) {
+    if (!String(values[field] ?? "").trim()) errors.push(`請填寫${label}`);
+  }
+
+  if (step === 2) {
+    if (!Number.isFinite(values.minimumSupportAmount) || values.minimumSupportAmount < 1) errors.push("最低支持金額須至少為 NT$ 1");
+    if (!Number.isFinite(values.targetAmount) || values.targetAmount < values.minimumSupportAmount) errors.push("目標支持金額須大於或等於最低支持金額");
+  }
+
+  if (step === 1 && values.coverUrl && !isHttpsUrl(values.coverUrl)) errors.push("封面圖片網址須使用 HTTPS");
 
   return errors;
 }
 
 export function isSubmissionReady(values: ProposalFormValues) {
   return getSubmissionErrors(values).length === 0;
+}
+
+export function isHttpsUrl(value: string) {
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
 }

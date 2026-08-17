@@ -39,3 +39,9 @@ Firebase 規則頁使用 CodeMirror。已確認第一個 CodeMirror 實例是主
 已確認規則編輯器為 Firebase 自訂元件，內部以 CodeMirror 維護內容；其一般可列舉控制器未提供可直接調用的發布方法。由於不應以未驗證的內部 API 推送生產規則，將改採使用者介面提供的鍵盤儲存／發布事件並確認歷程狀態。
 
 新版規則已成功發布。Firebase 規則歷程最新版本顯示為「今天 • 11:54 上午」，不再標示「尚未發布的變更」；正式 Firestore 現已套用會員僅可管理自身草稿／送審、不可自行公開或改寫募得金額與撥付配置的權限限制。
+
+## Firebase Storage
+
+創作者建立頁採用 `proposal-covers/{uid}/{timestamp}-{safeFileName}` 保存封面；前端檢查 JPG、PNG、WebP 與 5MB 上限，Storage 規則草案亦重複強制該限制。使用者已登入 Google 帳號 `eric40311toby@gmail.com` 並可開啟 `odj-sponsor` 專案，但 `https://console.firebase.google.com/project/odj-sponsor/storage/rules` 仍停在工作區載入畫面，尚未取得可發布的 Storage 規則編輯器。
+
+後續確認 Firebase Storage 尚未在 `odj-sponsor` 專案啟用；Firebase Console 顯示目前為 Spark 免付費方案，使用 Storage 需先升級專案定價方案。因此無法在現有方案下發布 Storage 規則或完成會員封面直接上傳的端對端驗證。

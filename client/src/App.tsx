@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import CreateProposal from "./pages/CreateProposal";
 import { OfficialPage, PrivacyPage, TermsPage } from "./pages/LegalPages";
 import Project from "./pages/Project";
 
@@ -21,6 +22,8 @@ function SiteRouter() {
       <Route path={`${routePrefix}/`} component={Home} />
       <Route path={`${routePrefix}/dashboard`} component={Dashboard} />
       <Route path={`${routePrefix}/dashboard/`} component={Dashboard} />
+      <Route path={`${routePrefix}/create`} component={CreateProposal} />
+      <Route path={`${routePrefix}/create/`} component={CreateProposal} />
       <Route path={`${routePrefix}/project/:slug`} component={Project} />
       <Route path={`${routePrefix}/project/:slug/`} component={Project} />
       <Route path={`${routePrefix}/about`} component={OfficialPage} />
