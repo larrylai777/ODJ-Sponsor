@@ -6,12 +6,14 @@ import { ArrowDownRight, ArrowUpRight, BookOpen, Check, ChevronRight, Compass, H
  * 老東家設計提醒：掌櫃的書案——首頁像一張有信任資訊的書案；故事先於交易，朱紅印章才是動作焦點。
  */
 
+const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
+
 const projects = [
   {
-    id: "moon-archive", title: "月海檔案：潮汐退去之後", creator: "邊城製本所", category: "奇幻小說", raised: "NT$ 438,560", target: "NT$ 300,000", supporters: "642", days: "剩 16 天", progress: "146%", image: "/manus-storage/odj-project-moon_472e0e89.jpg", accent: "bg-[#183454]", badge: "主編選書"
+    id: "moon-archive", title: "月海檔案：潮汐退去之後", creator: "邊城製本所", category: "奇幻小說", raised: "NT$ 438,560", target: "NT$ 300,000", supporters: "642", days: "剩 16 天", progress: "146%", image: asset("odj-project-moon.jpg"), accent: "bg-[#183454]", badge: "主編選書"
   },
   {
-    id: "greenhouse", title: "在杉林盡頭等雨", creator: "葉晴與繪者燈塔", category: "圖文小說", raised: "NT$ 182,940", target: "NT$ 250,000", supporters: "231", days: "剩 28 天", progress: "73%", image: "/manus-storage/odj-project-forest_5dd2f14d.jpg", accent: "bg-[#355c4c]", badge: "新作預熱"
+    id: "greenhouse", title: "在杉林盡頭等雨", creator: "葉晴與繪者燈塔", category: "圖文小說", raised: "NT$ 182,940", target: "NT$ 250,000", supporters: "231", days: "剩 28 天", progress: "73%", image: asset("odj-project-forest.jpg"), accent: "bg-[#355c4c]", badge: "新作預熱"
   },
   {
     id: "ink-garden", title: "墨園拾遺：特裝小說集", creator: "南島讀本", category: "經典重版", raised: "NT$ 611,200", target: "NT$ 500,000", supporters: "813", days: "剩 5 天", progress: "122%", image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=900&q=85", accent: "bg-[#6f3e35]", badge: "限量特裝"
@@ -23,7 +25,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
     <header className="sticky top-0 z-40 border-b paper-rule bg-[#fbf8ef]/92 backdrop-blur-md">
       <div className="container flex h-[72px] items-center justify-between gap-6">
         <a href="/" className="group flex items-center gap-3" aria-label="回到老東家首頁">
-          <img className="h-10 w-10 rounded-[8px] object-cover transition-transform duration-200 group-hover:-translate-y-0.5" src="/manus-storage/odj-sunrise-icon_0ab70907.png" alt="老東家日出圖示" />
+          <img className="h-10 w-10 rounded-[8px] object-cover transition-transform duration-200 group-hover:-translate-y-0.5" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
           <div className="leading-none"><p className="font-display text-[22px] font-black tracking-[0.08em]">老東家</p><p className="mt-1 font-mono text-[9px] tracking-[0.14em] text-[#a03a32]">ODJ SPONSOR</p></div>
         </a>
         <nav className="hidden items-center gap-7 text-sm font-medium md:flex" aria-label="主要導覽">
@@ -66,7 +68,7 @@ export default function Home() {
               </div>
             </div>
             <div className="relative -mr-4 hidden min-h-[620px] overflow-hidden lg:block">
-              <img src="/manus-storage/odj-hero-library_0174b13b.jpg" alt="小說特裝書與收藏周邊陳列在木製書案上" className="absolute inset-0 h-full w-full object-cover object-right" />
+              <img src={asset("odj-hero-library.jpg")} alt="小說特裝書與收藏周邊陳列在木製書案上" className="absolute inset-0 h-full w-full object-cover object-right" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#e9dfcc] via-[#e9dfcc]/20 to-transparent" />
               <div className="absolute bottom-10 right-8 flex items-center gap-3 border border-white/30 bg-[#22344b]/90 px-4 py-3 text-[#f8f0e4] backdrop-blur"><BookOpen size={17}/><span className="text-xs leading-5">收藏不是附贈。<br/>它是故事的第二種形狀。</span></div>
             </div>
@@ -100,7 +102,7 @@ export default function Home() {
 
         <section id="how" className="container py-20 sm:py-28"><div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]"><div><p className="font-mono text-[11px] tracking-[0.18em] text-[#a33e34]">HOW IT WORKS / 03</p><h2 className="font-display mt-3 text-4xl font-black tracking-[-0.035em] sm:text-5xl">從想讀，<br/>到成冊。</h2></div><ol className="grid gap-6 sm:grid-cols-3">{[["讀到心動","瀏覽專案故事、試閱與回饋方案，選擇你想收藏的那一份。"],["一起達標","在募資期限內集結支持；未達標時，這筆款項不會成立。"],["等待寄來","製作進度公開更新，書與周邊完成後，寄到你的書桌。"]].map(([title, text], i) => <li key={title} className="border-t-2 border-[#25201c] pt-5"><p className="font-mono text-sm text-[#a33e34]">0{i + 1}</p><h3 className="font-display mt-6 text-2xl font-bold">{title}</h3><p className="mt-3 text-sm leading-7 text-[#6d625a]">{text}</p></li>)}</ol></div></section>
       </main>
-      <footer className="border-t paper-rule bg-[#f0e7d7]"><div className="container flex flex-col justify-between gap-6 py-9 sm:flex-row sm:items-end"><div className="flex items-center gap-3"><img className="h-10 w-10 rounded-[8px] object-cover" src="/manus-storage/odj-sunrise-icon_0ab70907.png" alt="老東家日出圖示"/><div><p className="font-display text-lg font-black tracking-[0.08em]">老東家</p><p className="mt-1 text-xs text-[#70645a]">故事得有人先相信。</p></div></div><div className="text-xs leading-6 text-[#756a60]"><p>ODJ Sponsor Prototype · 僅供產品概念展示</p><p>不處理真實付款、訂單或個人資料。</p></div></div></footer>
+      <footer className="border-t paper-rule bg-[#f0e7d7]"><div className="container flex flex-col justify-between gap-6 py-9 sm:flex-row sm:items-end"><div className="flex items-center gap-3"><img className="h-10 w-10 rounded-[8px] object-cover" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><div><p className="font-display text-lg font-black tracking-[0.08em]">老東家</p><p className="mt-1 text-xs text-[#70645a]">故事得有人先相信。</p></div></div><div className="text-xs leading-6 text-[#756a60]"><p>ODJ Sponsor Prototype · 僅供產品概念展示</p><p>不處理真實付款、訂單或個人資料。</p></div></div></footer>
     </div>
   );
 }

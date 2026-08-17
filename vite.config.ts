@@ -206,6 +206,8 @@ function vitePluginStorageProxy(): Plugin {
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
 
 export default defineConfig({
+  // 老東家設計提醒：GitHub Pages 以 /ODJ-Sponsor/ 子路徑提供網站；本機開發仍維持根路徑。
+  base: process.env.GITHUB_ACTIONS === "true" ? "/ODJ-Sponsor/" : "/",
   plugins,
   resolve: {
     alias: {

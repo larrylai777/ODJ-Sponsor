@@ -12,6 +12,8 @@ const rewardOptions = [
   { id: "collector", name: "潮汐典藏組", price: "NT$ 1,680", detail: "精裝本 + 雙面壓克力立牌 + 3 張燙銀角色卡 + 典藏書盒", stock: "剩 42 份" },
 ];
 
+const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
+
 export default function Project() {
   const [selected, setSelected] = useState("book");
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,12 +25,12 @@ export default function Project() {
   };
 
   return <div className="min-h-screen bg-[#fbf8ef] text-[#29221e]">
-    <header className="sticky top-0 z-30 border-b border-[#d8cdbb] bg-[#fbf8ef]/95 backdrop-blur"><div className="container flex h-[72px] items-center justify-between"><a href="/" className="inline-flex items-center gap-2 text-sm font-semibold transition hover:text-[#b84236]"><ArrowLeft size={18}/> 回到今日書架</a><a href="/" className="flex items-center gap-2"><img className="h-9 w-9 rounded-[8px] object-cover" src="/manus-storage/odj-sunrise-icon_0ab70907.png" alt="老東家日出圖示"/><span className="font-display text-lg font-black tracking-[0.08em]">老東家</span></a></div></header>
+    <header className="sticky top-0 z-30 border-b border-[#d8cdbb] bg-[#fbf8ef]/95 backdrop-blur"><div className="container flex h-[72px] items-center justify-between"><a href="/" className="inline-flex items-center gap-2 text-sm font-semibold transition hover:text-[#b84236]"><ArrowLeft size={18}/> 回到今日書架</a><a href="/" className="flex items-center gap-2"><img className="h-9 w-9 rounded-[8px] object-cover" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="font-display text-lg font-black tracking-[0.08em]">老東家</span></a></div></header>
     <main className="container py-9 sm:py-14"><div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-14"><div>
       <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs"><span className="stamp border border-[#e1b6a8] bg-[#183454] px-3 py-1.5 font-semibold tracking-[0.12em] text-[#fff9ed]">主編選書</span><span className="font-semibold text-[#a23b33]">奇幻小說</span><span className="text-[#74675e]">邊城製本所</span></div>
       <h1 className="font-display text-4xl font-black leading-[1.25] tracking-[-0.04em] sm:text-6xl">月海檔案：<br/>潮汐退去之後</h1>
       <p className="mt-6 max-w-2xl text-lg leading-9 text-[#5d5149]">當海水每夜退去，城市底下便露出一座被遺忘的月亮。這是一本關於失物、潮聲與重返故鄉的長篇奇幻小說；也將是我們想好好做成的第一套特裝書。</p>
-      <div className="mt-9 overflow-hidden border border-[#d8cdbb] bg-[#e8ded0] shadow-[6px_7px_0_rgba(43,34,29,.12)]"><img src="/manus-storage/odj-hero-library_0174b13b.jpg" alt="月海檔案特裝書與周邊的桌面展示" className="aspect-[16/8] w-full object-cover object-center"/></div>
+      <div className="mt-9 overflow-hidden border border-[#d8cdbb] bg-[#e8ded0] shadow-[6px_7px_0_rgba(43,34,29,.12)]"><img src={asset("odj-hero-library.jpg")} alt="月海檔案特裝書與周邊的桌面展示" className="aspect-[16/8] w-full object-cover object-center"/></div>
       <div className="mt-12 grid gap-10 border-t border-[#d8cdbb] pt-10 sm:grid-cols-2"><div><h2 className="font-display text-3xl font-bold">這次想做的，不只是一冊書</h2><p className="mt-4 leading-8 text-[#5f544c]">特裝版會採精裝書衣、前後蝴蝶頁與燙金藏書票。典藏組另外收錄兩位主角的雙面壓克力立牌、燙銀角色卡與書盒；每一項回饋都會在打樣完成後於進度頁公開確認。</p></div><div className="border-l border-[#d8cdbb] pl-0 sm:pl-8"><h3 className="font-display text-2xl font-bold">製作時程</h3><ul className="mt-5 space-y-4 text-sm"><li className="flex gap-3"><Check className="mt-0.5 shrink-0 text-[#b84236]" size={17}/><span><b>2026/08</b>　完成內容校對與書封提案</span></li><li className="flex gap-3"><Check className="mt-0.5 shrink-0 text-[#b84236]" size={17}/><span><b>2026/09</b>　完成印刷、周邊打樣確認</span></li><li className="flex gap-3"><PackageCheck className="mt-0.5 shrink-0 text-[#b84236]" size={17}/><span><b>2026/11</b>　依贊助方案分批寄出</span></li></ul></div></div>
       <div className="mt-14 border-t border-[#d8cdbb] pt-10"><p className="font-mono text-[11px] tracking-[0.16em] text-[#a43c34]">UPDATE · 2026.08.12</p><h2 className="font-display mt-3 text-3xl font-bold">我們把月光放進了書盒的內襯</h2><p className="mt-4 max-w-2xl leading-8 text-[#5f544c]">首輪樣紙已完成測試，內襯選用偏霧面的珍珠紙，讓月海的藍色在不同角度有更安靜的反光。下一篇更新會公開立牌的正式線稿。</p></div>
     </div>
