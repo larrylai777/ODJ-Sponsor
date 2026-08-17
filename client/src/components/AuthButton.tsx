@@ -16,6 +16,9 @@ export default function AuthButton({ compact = false, fullWidth = false }: AuthB
 
   useEffect(() => onAuthStateChanged(auth, (nextUser) => { setUser(nextUser); setReady(true); }), []);
 
+  // 首頁手機選單以 ProposalEntry 統一承接登入與提案；不再額外顯示帳號按鈕。
+  if (fullWidth) return null;
+
   const login = async () => {
     setPending(true);
     try {
