@@ -7,12 +7,27 @@
 
 # GitHub Pages 部署
 
-- [ ] 檢查倉庫可見性與 GitHub Pages 設定狀態。
+- [x] 檢查倉庫可見性與 GitHub Pages 設定狀態。
 - [x] 建立 GitHub Actions 靜態網站部署流程。
-- [ ] 啟用 GitHub Pages 並確認公開網址可正常載入。
+- [x] 建立 gh-pages 靜態發布分支。
+- [x] 啟用 GitHub Pages 並確認公開首頁可正常載入。
 
 # GitHub Pages 路由修正
 
 - [x] 讓 React 路由識別 /ODJ-Sponsor/ 子路徑。
-- [ ] 重新建置並更新 gh-pages 靜態發布分支。
-- [ ] 驗證公開首頁與專案頁的路由結果。
+- [x] 重新建置並更新 gh-pages 靜態發布分支。
+- [x] 驗證公開首頁與專案頁的路由結果。
+
+# GitHub Pages 專案深層連結
+
+- [x] 為展示中的三個專案建立靜態 index.html 入口。
+- [x] 重新發布 gh-pages 分支並驗證專案詳情網址。
+
+> 驗證紀錄：GitHub Pages 已完成建置；公開首頁與月海檔案專案詳情頁均已正常載入。
+
+# 圓角矩形 Icon 視覺調整
+
+- [x] 盤點首頁、專案頁與頁尾的日出 Icon 呈現位置。
+- [x] 將日出 Icon 套用為一致的圓角矩形徽章。
+- [x] 驗證桌面版首頁與專案頁的圓角矩形 Icon 比例。
+- [x] 驗證手機版圓角矩形 Icon，準備同步更新 GitHub Pages。
