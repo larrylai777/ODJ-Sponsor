@@ -54,4 +54,8 @@ Firebase 規則頁使用 CodeMirror。已確認第一個 CodeMirror 實例是主
 
 ## GitHub Pages 服務端發布異常
 
-2026-08-17 15:06 UTC 後，提交 `41fec53bc12ab31d0f6c8c2d2dc330bd7872fafd` 與 `9c2f9dc4f0cc5a38b5c1cbeecc8183ce7fc62d66` 的 GitHub Pages 工作流程均在 Deploy to GitHub Pages 階段失敗。官方工作流程日誌指出部署建立 API 回傳 HTTP 503「No server is currently available to service your request」，並非靜態產物建置錯誤；官方 GitHub Status 同時通報 API Requests 與 Actions 出現重大可用性問題。最新網站建置已通過，本次公開發布待 GitHub 服務恢復後再重新執行。
+2026-08-17 15:06 UTC 後，提交 `41fec53bc12ab31d0f6c8c2d2dc330bd7872fafd` 與 `9c2f9dc4f0cc5a38b5c1cbeecc8183ce7fc62d66` 的 GitHub Pages 工作流程均在 Deploy to GitHub Pages 階段失敗。官方工作流程日誌指出部署建立 API 回傳 HTTP 503「No server is currently available to service your request」，並非靜態產物建置錯誤；官方 GitHub Status 同時通報 API Requests 與 Actions 出現重大可用性問題。提交 `bdde023f317a6c3d7dd906ad2135fb1b743469c0` 則在建置階段無法下載 `actions/jekyll-build-pages@v1`，依序收到 HTTP 503 與 HTTP 429，三次重試後失敗。最新網站建置已通過，本次公開發布待 GitHub 服務恢復後再重新執行。
+
+## 本機首頁交叉驗證
+
+以 GitHub Pages 子路徑設定啟動本機 Vite 預覽後，瀏覽器截圖工具偶爾呈現空白；但 DOM 已正常掛載首頁、52px 導覽列與「目前尚無公開作品。」空白狀態區塊。此現象與先前預覽截圖問題一致，不能視為程式渲染失敗；仍需在 GitHub Pages 服務恢復後以公開網址做最終手機版驗證。

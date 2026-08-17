@@ -95,9 +95,12 @@ export default function Home() {
               <img className="size-9 rounded-[12px] object-cover object-center" src={asset("odj-sunrise-icon.png")} alt="" />
               <span className="font-display text-[18px] tracking-[-0.02em] text-[#1d1d1f]">老東家</span>
             </a>
-            <button type="button" onClick={() => setMenuOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-white text-[#1d1d1f] shadow-sm transition hover:bg-[#e8e8ed] active:scale-[0.97]" aria-label="關閉選單">
-              <X size={19} />
-            </button>
+            <div className="flex items-center gap-2">
+              <a href={`${basePath}dashboard`} onClick={() => setMenuOpen(false)} className="inline-flex h-9 items-center rounded-2xl bg-[#f36b3b] px-3.5 text-xs font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">進入創作者工作台</a>
+              <button type="button" onClick={() => setMenuOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-white text-[#1d1d1f] shadow-sm transition hover:bg-[#e8e8ed] active:scale-[0.97]" aria-label="關閉選單">
+                <X size={19} />
+              </button>
+            </div>
           </div>
           <div className="container flex flex-1 flex-col justify-between py-10 sm:py-14">
             <nav className="space-y-1" aria-label="手機版主要導覽">
@@ -106,8 +109,7 @@ export default function Home() {
               <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#how" onClick={() => setMenuOpen(false)}>支持方式</a>
             </nav>
             <div className="mt-10 border-t border-[#d2d2d7] pt-5">
-              <a href={`${basePath}dashboard`} onClick={() => setMenuOpen(false)} className="inline-flex items-center rounded-2xl bg-[#f36b3b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">進入創作者工作台</a>
-              <p className="mt-5 max-w-sm text-xs leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。按 Esc 或右上角按鈕可關閉選單。</p>
+              <p className="max-w-sm text-xs leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。按 Esc 或右上角按鈕可關閉選單。</p>
             </div>
           </div>
         </div>
