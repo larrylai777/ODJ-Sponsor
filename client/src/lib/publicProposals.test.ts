@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { selectPublishedProposals } from "./publicProposals";
+import { getFundingProgress, selectPublishedProposals } from "./publicProposals";
 
 const timestamp = (value: string) => ({ toDate: () => new Date(value) });
 
@@ -21,5 +21,17 @@ describe("selectPublishedProposals", () => {
     ]);
 
     expect(proposals.map((proposal) => proposal.id)).toEqual(["newer", "older"]);
+  });
+
+  it("以已募得與目標金額計算公開募資百分比", () => {
+    expect(getFundingProgress({ totalRaised: 182_940, targetAmount: 250_000 })).toEqual({ raised: 182_940, target: 250_000, percentage: 73, barPercentage: 73 });
+  });
+
+  it("超額支持仍顯示真實百分比，但進度條不超出卡片", () => {
+    expect(getFundingProgress({ totalRaised: 611_200, targetAmount: 500_000 })).toEqual({ raised: 611_200, target: 500_000, percentage: 122, barPercentage: 100 });
+  });
+
+  it("未設定有效目標時不產生無效百分比", () => {
+    expect(getFundingProgress({ totalRaised: 800, targetAmount: 0 })).toEqual({ raised: 800, target: 0, percentage: 0, barPercentage: 0 });
   });
 });
