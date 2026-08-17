@@ -27,3 +27,7 @@
 2026-08-17 已以瀏覽器開啟小額支持測試連結，Stripe Checkout 顯示「老東家｜小額支持（測試）」與「NT$390.00」，並標示為 Sandbox。僅檢視結帳頁，未填寫顧客資料、卡號或送出付款。來源：https://buy.stripe.com/test_6oU00l82T7jw8kb8C15gc00
 
 實體書收藏與藏書人方案也已分別驗證：Stripe Checkout 顯示「老東家｜實體書收藏（測試）」與「NT$890.00」，以及「老東家｜藏書人方案（測試）」與「NT$1,690.00」。兩者均標示為 Sandbox，僅檢視頁面，未輸入顧客資料、卡號或送出付款。來源：https://buy.stripe.com/test_3cI3cxdndbzMdEvbOd5gc01 、https://buy.stripe.com/test_7sY00l1Ev6fs1VN5pP5gc02
+
+## 公開網站部署驗證
+
+GitHub Pages 提交 `1e9fc6d` 已完成建置。公開月海檔案頁面顯示小額支持、實體書收藏與藏書人方案三個贊助按鈕，以及頁尾保留的既有官方連結。按鈕對應關係由 `stripePaymentLinks` 單元測試確認，三個網址皆為 Stripe `/test_` 結帳連結；外部 Stripe Checkout 亦逐一直接檢視確認方案與金額。自動化瀏覽器點擊按鈕時另開的外部結帳頁導致原頁面快照失效，因此未在頁面中輸入或送出任何付款資料。
