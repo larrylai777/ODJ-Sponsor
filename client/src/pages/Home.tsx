@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, Menu, X } from "lucide-react";
+import { ArrowDown, ImageOff, Menu, X } from "lucide-react";
 import { collection, onSnapshot, query, where, type DocumentData } from "firebase/firestore";
 import AuthButton from "@/components/AuthButton";
 import ProposalEntry from "@/components/ProposalEntry";
@@ -11,6 +11,16 @@ import { selectPublishedProposals, type PublicProposal } from "@/lib/publicPropo
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
 const basePath = import.meta.env.BASE_URL;
+
+function ProposalCover({ coverUrl, title }: { coverUrl?: string; title?: string }) {
+  const [failed, setFailed] = useState(!coverUrl || coverUrl.includes("facebook.com/share/"));
+
+  if (failed) {
+    return <div className="grid aspect-[16/9] place-items-center bg-[#172846] p-6 text-center text-white"><div><ImageOff className="mx-auto size-6 text-[#ffc8aa]" /><p className="mt-3 text-sm font-medium">{title || "作品封面"}</p><p className="mt-1 text-xs text-white/65">封面將於資料更新後顯示</p></div></div>;
+  }
+
+  return <img src={coverUrl} alt={`${title || "作品"}封面`} onError={() => setFailed(true)} className="aspect-[16/9] w-full bg-[#e8e8ed] object-cover" />;
+}
 const heroImage = asset("odj-dawn-hero.jpg");
 const workshopImage = asset("odj-dawn-workshop.jpg");
 
@@ -162,7 +172,7 @@ export default function Home() {
               <div className="mx-auto mt-10 grid max-w-6xl gap-5 sm:mt-12 md:grid-cols-2">
                 {publishedProposals.map((proposal) => (
                   <article key={proposal.id} className="overflow-hidden rounded-[30px] border border-[#e8e8ed] bg-[#f5f5f7] text-left shadow-[0_14px_45px_rgba(20,20,35,0.05)]">
-                    {proposal.coverUrl ? <img src={proposal.coverUrl} alt={`${proposal.title || "作品"}封面`} className="aspect-[16/9] w-full bg-[#e8e8ed] object-cover" /> : <div className="grid aspect-[16/9] place-items-center bg-[#e8e8ed] text-sm text-[#6e6e73]">尚未提供封面</div>}
+                    <ProposalCover coverUrl={proposal.coverUrl} title={proposal.title} />
                     <div className="p-6 sm:p-7"><div className="flex items-center justify-between gap-3"><span className="rounded-full bg-[#fff3e8] px-2.5 py-1 text-xs font-semibold text-[#bd4d21]">已公開</span><span className="text-xs text-[#6e6e73]">{proposal.category || "作品提案"}</span></div><h3 className="font-display mt-5 text-3xl tracking-[-0.04em] text-[#1d1d1f]">{proposal.title || "未命名作品"}</h3><p className="mt-2 text-sm text-[#6e6e73]">{proposal.creatorName || "老東家創作者"}</p><p className="mt-5 text-sm leading-7 text-[#424245]">{proposal.summary || proposal.description || "創作者正在整理這份作品的公開說明。"}</p><div className="mt-6 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-white p-4"><p className="text-xs text-[#6e6e73]">支持目標</p><p className="mt-1 font-semibold text-[#1d1d1f]">NT$ {(Number(proposal.targetAmount) || 0).toLocaleString("zh-TW")}</p></div><div className="rounded-2xl bg-white p-4"><p className="text-xs text-[#6e6e73]">最低支持</p><p className="mt-1 font-semibold text-[#1d1d1f]">NT$ {(Number(proposal.minimumSupportAmount) || 0).toLocaleString("zh-TW")}</p></div></div><dl className="mt-5 space-y-3 border-t border-[#e5e5e7] pt-5 text-sm"><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">製作階段</dt><dd className="text-[#1d1d1f]">{proposal.currentStage || "即將開始"}</dd></div><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">下一里程碑</dt><dd className="text-[#1d1d1f]">{proposal.nextMilestone || "待公布"}</dd></div><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">預計完成</dt><dd className="text-[#1d1d1f]">{proposal.estimatedCompletion || "待公布"}</dd></div></dl></div>
                   </article>
                 ))}
