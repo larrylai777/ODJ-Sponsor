@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Router as WouterRouter, Switch } from "wouter";
+import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -11,19 +11,17 @@ import Project from "./pages/Project";
  * 老東家設計提醒：新台式書店美學，以紙張、墨色、朱紅印章與清楚的履約資訊建立信任。
  */
 
-const routerBase = import.meta.env.BASE_URL === "/" ? "/" : import.meta.env.BASE_URL.replace(/\/$/, "");
+const routePrefix = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
 
 function SiteRouter() {
   return (
-    <WouterRouter base={routerBase}>
-      <Switch>
-        <Route path={"/"} component={Home} />
-        <Route path={"/project/:slug"} component={Project} />
-        <Route path={"/404"} component={NotFound} />
-        {/* Final fallback route */}
-        <Route component={NotFound} />
-      </Switch>
-    </WouterRouter>
+    <Switch>
+      <Route path={`${routePrefix}/`} component={Home} />
+      <Route path={`${routePrefix}/project/:slug`} component={Project} />
+      <Route path={`${routePrefix}/404`} component={NotFound} />
+      {/* Final fallback route */}
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
