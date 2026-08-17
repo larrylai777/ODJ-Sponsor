@@ -10,3 +10,9 @@
 - [ ] 檢查倉庫可見性與 GitHub Pages 設定狀態。
 - [x] 建立 GitHub Actions 靜態網站部署流程。
 - [ ] 啟用 GitHub Pages 並確認公開網址可正常載入。
+
+# GitHub Pages 路由修正
+
+- [x] 讓 React 路由識別 /ODJ-Sponsor/ 子路徑。
+- [ ] 重新建置並更新 gh-pages 靜態發布分支。
+- [ ] 驗證公開首頁與專案頁的路由結果。

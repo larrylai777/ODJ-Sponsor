@@ -7,6 +7,7 @@ import { ArrowDownRight, ArrowUpRight, BookOpen, Check, ChevronRight, Compass, H
  */
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
+const basePath = import.meta.env.BASE_URL;
 
 const projects = [
   {
@@ -24,7 +25,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
   return (
     <header className="sticky top-0 z-40 border-b paper-rule bg-[#fbf8ef]/92 backdrop-blur-md">
       <div className="container flex h-[72px] items-center justify-between gap-6">
-        <a href="/" className="group flex items-center gap-3" aria-label="回到老東家首頁">
+        <a href={basePath} className="group flex items-center gap-3" aria-label="回到老東家首頁">
           <img className="h-10 w-10 rounded-[8px] object-cover transition-transform duration-200 group-hover:-translate-y-0.5" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
           <div className="leading-none"><p className="font-display text-[22px] font-black tracking-[0.08em]">老東家</p><p className="mt-1 font-mono text-[9px] tracking-[0.14em] text-[#a03a32]">ODJ SPONSOR</p></div>
         </a>
@@ -83,7 +84,7 @@ export default function Home() {
           <div className="mt-9 grid gap-x-7 gap-y-12 md:grid-cols-2 lg:grid-cols-[1.25fr_0.85fr_0.85fr]">
             {projects.map((project, index) => (
               <article key={project.id} className={index === 0 ? "relative lg:pr-7 lg:after:absolute lg:after:right-0 lg:after:top-0 lg:after:h-full lg:after:w-px lg:after:bg-[#cfc1ac]" : ""}>
-                <a href={`/project/${project.id}`} className="group block">
+                <a href={`${basePath}project/${project.id}`} className="group block">
                   {index === 0 && <div className="mb-3 flex items-center justify-between border-b paper-rule pb-2"><span className="font-mono text-[10px] tracking-[0.16em] text-[#8e3831]">館藏索引 / FEATURED 001</span><span className="font-mono text-[10px] text-[#6e6259]">A-01</span></div>}
                   <div className={`relative overflow-hidden bg-[#d8cfbe] ink-shadow ${index === 0 ? "aspect-[4/4.8]" : "aspect-[4/4.55]"}`}>
                     <img src={project.image} alt={`${project.title} 專案封面`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.045]" />
