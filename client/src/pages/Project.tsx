@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Check, Heart, ShieldCheck, X } from "lucide-react";
+import { ArrowLeft, Check, Heart, ShieldCheck } from "lucide-react";
 import AuthButton from "@/components/AuthButton";
 import SiteFooter from "@/components/SiteFooter";
 import { stripePaymentLinks, type StripePaymentLinkId } from "@/lib/stripePaymentLinks";
@@ -28,11 +28,10 @@ const projectImage = asset("odj-dawn-project.jpg");
 
 export default function Project() {
   const [selected, setSelected] = useState<StripePaymentLinkId>("book");
-  const [modalOpen, setModalOpen] = useState(false);
   const current = rewardOptions.find((item) => item.id === selected) ?? rewardOptions[1];
   const checkoutUrl = stripePaymentLinks[current.id];
 
-  const continueToSponsor = () => {
+  const supportSelected = () => {
     if (!checkoutUrl) {
       toast("Stripe 付款連結尚未設定", {
         description: "建立對應方案的 Stripe Payment Link 後，這裡才會開啟安全付款頁。",
@@ -41,7 +40,6 @@ export default function Project() {
     }
 
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
-    setModalOpen(false);
   };
 
   return (
@@ -53,7 +51,6 @@ export default function Project() {
             探索作品
           </a>
           <div className="flex items-center gap-3">
-            <a className="hidden text-xs font-medium text-[#424245] transition hover:text-[#f36b3b] sm:block" href={facebookUrl} target="_blank" rel="noreferrer">Facebook</a>
             <AuthButton compact />
             <a href={homePath} className="flex items-center gap-2">
               <img className="size-8 rounded-[11px] object-cover" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
@@ -127,41 +124,28 @@ export default function Project() {
 
               <div className="mt-7">
                 <p className="text-sm font-semibold">選擇支持方式</p>
-                <div className="mt-3 space-y-2">
+                <div className="mt-3 space-y-2" role="radiogroup" aria-label="支持方案">
                   {rewardOptions.map((option) => (
-                    <button key={option.id} onClick={() => setSelected(option.id)} className={`w-full rounded-2xl p-4 text-left transition ${selected === option.id ? "bg-white ring-1 ring-[#f36b3b]" : "bg-white/55 hover:bg-white"}`}>
+                    <label key={option.id} className={`block cursor-pointer rounded-2xl p-4 transition ${selected === option.id ? "bg-white ring-1 ring-[#f36b3b]" : "bg-white/55 hover:bg-white"}`}>
+                      <input type="radio" name="reward" value={option.id} checked={selected === option.id} onChange={() => setSelected(option.id)} className="sr-only" />
                       <div className="flex items-start justify-between gap-3">
                         <div><p className="text-sm font-semibold">{option.name}</p><p className="mt-1 text-xs leading-5 text-[#6e6e73]">{option.detail}</p></div>
                         <p className="shrink-0 text-sm font-semibold">{option.price}</p>
                       </div>
                       <p className={`mt-2 text-xs ${option.stock.includes("剩") ? "text-[#f36b3b]" : "text-[#6e6e73]"}`}>{option.stock}</p>
-                    </button>
+                    </label>
                   ))}
                 </div>
               </div>
 
-              <button onClick={() => setModalOpen(true)} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f36b3b] py-3.5 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">支持「{current.name}」<Heart size={16} /></button>
-              <div className="mt-5 flex gap-2 text-xs leading-5 text-[#6e6e73]"><ShieldCheck className="mt-0.5 shrink-0 text-[#6e6e73]" size={16} />目前為 Stripe 測試模式。點擊後將前往 Stripe 安全測試結帳頁，不會產生真實扣款。</div>
+              <button onClick={supportSelected} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f36b3b] py-3.5 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">支持「{current.name}」<Heart size={16} /></button>
+              <div className="mt-4 flex gap-2 text-xs leading-5 text-[#6e6e73]"><ShieldCheck className="mt-0.5 shrink-0 text-[#6e6e73]" size={16} />Stripe 測試模式，將直接開啟安全測試結帳頁，不會產生真實扣款。</div>
             </div>
           </aside>
         </section>
       </main>
 
       <SiteFooter />
-
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/35 p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-[28px] bg-white p-7 odj-shadow-lg">
-            <div className="flex items-start justify-between">
-              <div><p className="odj-eyebrow text-[#f36b3b]">方案確認</p><h2 className="font-display mt-2 text-3xl tracking-[-0.04em]">確認你的選擇。</h2></div>
-              <button onClick={() => setModalOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-[#f5f5f7]" aria-label="關閉"><X size={18} /></button>
-            </div>
-            <div className="mt-6 border-y border-[#e8e8ed] py-5"><p className="font-semibold">{current.name}</p><p className="mt-1 text-sm text-[#6e6e73]">{current.detail}</p><p className="mt-3 text-xl font-semibold">{current.price}</p></div>
-            <p className="mt-5 text-sm leading-7 text-[#6e6e73]">你將前往 Stripe 的安全測試結帳頁。請使用 Stripe 測試卡完成驗證；本階段不會產生真實扣款。</p>
-            <button onClick={continueToSponsor} className="mt-6 w-full rounded-2xl bg-[#f36b3b] py-3.5 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">{checkoutUrl ? "前往 Stripe 安全測試付款頁" : "Stripe 付款連結設定中"}</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { toast } from "sonner";
 import { ArrowDown, ArrowRight, ArrowUpRight, ExternalLink, Menu } from "lucide-react";
 import AuthButton from "@/components/AuthButton";
 import ProposalEntry from "@/components/ProposalEntry";
@@ -9,8 +8,6 @@ import SiteFooter from "@/components/SiteFooter";
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
 const basePath = import.meta.env.BASE_URL;
-const facebookUrl = "https://www.facebook.com/share/19TwFNqfoG/?mibextid=wwXIfr";
-const rallyBrandUrl = "https://store.line.me/search/zh-Hant?q=%E6%8B%89%E5%8A%9B%E4%B8%80%E6%96%B9";
 const heroImage = asset("odj-dawn-hero.jpg");
 const projectImage = asset("odj-dawn-project.jpg");
 const workshopImage = asset("odj-dawn-workshop.jpg");
@@ -70,16 +67,13 @@ function Header({ onMenu }: { onMenu: () => void }) {
           <img className="size-9 shrink-0 rounded-[12px] object-cover object-center transition-transform duration-200 group-hover:-translate-y-0.5" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
           <span className="font-display text-[18px] tracking-[-0.02em] text-[#1d1d1f]">老東家</span>
         </a>
-        <nav className="hidden items-center gap-5 text-xs font-medium text-[#424245] lg:flex" aria-label="主要導覽">
+        <nav className="hidden items-center gap-6 text-xs font-medium text-[#424245] lg:flex" aria-label="主要導覽">
           <a className="odj-link transition hover:text-[#f36b3b]" href="#shelf">探索作品</a>
           <a className="odj-link transition hover:text-[#f36b3b]" href="#workshop">創作者工作台</a>
-          <a className="odj-link transition hover:text-[#f36b3b]" href="#how">如何支持</a>
-          <a className="odj-link inline-flex items-center gap-1 transition hover:text-[#f36b3b]" href={facebookUrl} target="_blank" rel="noreferrer">Facebook <ExternalLink size={12} /></a>
-          <a className="odj-link inline-flex items-center gap-1 transition hover:text-[#f36b3b]" href={rallyBrandUrl} target="_blank" rel="noreferrer">拉力一方 <ExternalLink size={12} /></a>
+          <a className="odj-link transition hover:text-[#f36b3b]" href="#how">支持方式</a>
         </nav>
         <div className="flex items-center gap-2">
           <div className="hidden md:block"><AuthButton compact /></div>
-          <div className="hidden sm:block"><ProposalEntry className="px-3 py-2 text-xs" /></div>
           <button onClick={onMenu} className="grid size-9 place-items-center rounded-2xl bg-[#f5f5f7] text-[#1d1d1f] transition hover:bg-[#e8e8ed] active:scale-[0.97] lg:hidden" aria-label="開啟選單">
             <Menu size={18} />
           </button>
@@ -122,9 +116,8 @@ export default function Home() {
           <div className="space-y-4 text-sm font-medium text-[#424245]">
             <a className="block" href="#shelf" onClick={() => setMenuOpen(false)}>探索作品</a>
             <a className="block" href="#workshop" onClick={() => setMenuOpen(false)}>創作者工作台</a>
-            <a className="block" href="#how" onClick={() => setMenuOpen(false)}>如何支持</a>
-            <a className="flex items-center gap-1" href={facebookUrl} target="_blank" rel="noreferrer">Facebook 官方社群 <ExternalLink size={13} /></a>
-            <div className="grid gap-2 border-t border-[#e8e8ed] pt-4"><AuthButton fullWidth /><ProposalEntry fullWidth /></div>
+            <a className="block" href="#how" onClick={() => setMenuOpen(false)}>支持方式</a>
+            <p className="border-t border-[#e8e8ed] pt-4 text-xs font-normal leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。</p>
           </div>
         </div>
       )}
@@ -135,9 +128,9 @@ export default function Home() {
               <p className="odj-eyebrow text-[#6e6e73]">ODJ SPONSOR</p>
               <h1 className="font-display mt-5 text-[42px] leading-[1.06] tracking-[-0.055em] text-[#1d1d1f] sm:text-6xl lg:text-8xl">讓下一本書，<br /><span className="text-[#172846]">正式亮相。</span></h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6e6e73] sm:text-xl">老東家把故事、支持與製作節奏放在同一個清楚的地方。先讀一段，再決定要不要陪它走遠。</p>
-              <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
                 <a href="#shelf" className="inline-flex items-center gap-2 rounded-2xl bg-[#f36b3b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">探索正在發生的作品 <ArrowDown size={16} /></a>
-                <button onClick={() => toast("關於老東家", { description: "這是一個聚焦華文小說與周邊的群眾支持平台原型。" })} className="inline-flex items-center gap-1 text-sm font-semibold text-[#172846] transition hover:text-[#f36b3b]">認識老東家 <ArrowRight size={16} /></button>
+                <a href={`${basePath}about`} className="inline-flex items-center gap-1 text-sm font-medium text-[#424245] transition hover:text-[#f36b3b]">認識老東家 <ArrowRight size={16} /></a>
               </div>
             </div>
             <div className="mx-auto mt-14 max-w-6xl overflow-hidden rounded-[28px] bg-[#dfe6e8] sm:mt-20"><img src={heroImage} alt="晨光灑在小說、手稿與書寫桌面上" className="aspect-[16/8] w-full object-cover object-center" /></div>
