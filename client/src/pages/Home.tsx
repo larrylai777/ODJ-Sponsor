@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, Menu, X } from "lucide-react";
+import { collection, onSnapshot, query, where, type DocumentData } from "firebase/firestore";
 import AuthButton from "@/components/AuthButton";
 import ProposalEntry from "@/components/ProposalEntry";
 import SiteFooter from "@/components/SiteFooter";
+import { db } from "@/lib/firebase";
+import { selectPublishedProposals, type PublicProposal } from "@/lib/publicProposals";
 
 /** 首頁採作品優先的純支持敘事：先閱讀作品與承諾，再決定是否支持；平台不以基金會身分自居。 */
 
@@ -38,6 +41,24 @@ function Header({ onMenu, mobileNavVisible }: { onMenu: () => void; mobileNavVis
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileNavVisible, setMobileNavVisible] = useState(true);
+  const [publishedProposals, setPublishedProposals] = useState<PublicProposal[]>([]);
+  const [isLoadingShelf, setIsLoadingShelf] = useState(true);
+
+  useEffect(() => {
+    const publishedQuery = query(collection(db, "proposals"), where("status", "==", "published"));
+    return onSnapshot(
+      publishedQuery,
+      (snapshot) => {
+        const proposals = snapshot.docs.map((document) => ({ id: document.id, ...document.data() }) as PublicProposal);
+        setPublishedProposals(selectPublishedProposals(proposals));
+        setIsLoadingShelf(false);
+      },
+      () => {
+        setPublishedProposals([]);
+        setIsLoadingShelf(false);
+      },
+    );
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -132,15 +153,23 @@ export default function Home() {
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <p className="odj-eyebrow text-[#6e6e73]">OPEN FOR STORIES</p>
-              <h2 className="font-display mt-4 text-4xl tracking-[-0.045em] sm:text-6xl">下一個被讀見的故事，<br />可能正等待你開始。</h2>
-              <p className="mt-5 text-base leading-7 text-[#6e6e73]">公開作品會在平台審核後才出現。現在，這個書架正為下一份提案保留位置。</p>
+              <h2 className="font-display mt-4 text-4xl tracking-[-0.045em] sm:text-6xl">{publishedProposals.length ? <>正在被讀見的故事，<br />正在等待你的支持。</> : <>下一個被讀見的故事，<br />可能正等待你開始。</>}</h2>
+              <p className="mt-5 text-base leading-7 text-[#6e6e73]">{publishedProposals.length ? "每份上架作品都已通過平台審核，並公開支持目標與製作承諾。" : "公開作品會在平台審核後才出現。現在，這個書架正為下一份提案保留位置。"}</p>
             </div>
-            <div className="mx-auto mt-10 max-w-4xl rounded-[30px] border border-[#e8e8ed] bg-[#f5f5f7] p-8 text-center sm:mt-12 sm:p-14">
-              <p className="odj-eyebrow text-[#f36b3b]">THE SHELF IS OPEN</p>
-              <h3 className="font-display mt-4 text-3xl tracking-[-0.04em] sm:text-4xl">目前尚無公開作品。</h3>
-              <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[#6e6e73] sm:text-base">每份作品必須先完成基本資料、支持目標、透明度與三期里程碑，經平台審核後才會在這裡公開。你可以先建立自己的提案草稿。</p>
-              <div className="mt-7 flex justify-center"><ProposalEntry label="建立第一份作品" /></div>
-            </div>
+            {isLoadingShelf ? (
+              <div className="mx-auto mt-10 max-w-4xl rounded-[30px] border border-[#e8e8ed] bg-[#f5f5f7] p-8 text-center sm:mt-12 sm:p-14" aria-live="polite"><p className="odj-eyebrow text-[#f36b3b]">THE SHELF IS OPEN</p><p className="mt-4 text-sm text-[#6e6e73]">正在整理已公開作品。</p></div>
+            ) : publishedProposals.length ? (
+              <div className="mx-auto mt-10 grid max-w-6xl gap-5 sm:mt-12 md:grid-cols-2">
+                {publishedProposals.map((proposal) => (
+                  <article key={proposal.id} className="overflow-hidden rounded-[30px] border border-[#e8e8ed] bg-[#f5f5f7] text-left shadow-[0_14px_45px_rgba(20,20,35,0.05)]">
+                    {proposal.coverUrl ? <img src={proposal.coverUrl} alt={`${proposal.title || "作品"}封面`} className="aspect-[16/9] w-full bg-[#e8e8ed] object-cover" /> : <div className="grid aspect-[16/9] place-items-center bg-[#e8e8ed] text-sm text-[#6e6e73]">尚未提供封面</div>}
+                    <div className="p-6 sm:p-7"><div className="flex items-center justify-between gap-3"><span className="rounded-full bg-[#fff3e8] px-2.5 py-1 text-xs font-semibold text-[#bd4d21]">已公開</span><span className="text-xs text-[#6e6e73]">{proposal.category || "作品提案"}</span></div><h3 className="font-display mt-5 text-3xl tracking-[-0.04em] text-[#1d1d1f]">{proposal.title || "未命名作品"}</h3><p className="mt-2 text-sm text-[#6e6e73]">{proposal.creatorName || "老東家創作者"}</p><p className="mt-5 text-sm leading-7 text-[#424245]">{proposal.summary || proposal.description || "創作者正在整理這份作品的公開說明。"}</p><div className="mt-6 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-white p-4"><p className="text-xs text-[#6e6e73]">支持目標</p><p className="mt-1 font-semibold text-[#1d1d1f]">NT$ {(Number(proposal.targetAmount) || 0).toLocaleString("zh-TW")}</p></div><div className="rounded-2xl bg-white p-4"><p className="text-xs text-[#6e6e73]">最低支持</p><p className="mt-1 font-semibold text-[#1d1d1f]">NT$ {(Number(proposal.minimumSupportAmount) || 0).toLocaleString("zh-TW")}</p></div></div><dl className="mt-5 space-y-3 border-t border-[#e5e5e7] pt-5 text-sm"><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">製作階段</dt><dd className="text-[#1d1d1f]">{proposal.currentStage || "即將開始"}</dd></div><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">下一里程碑</dt><dd className="text-[#1d1d1f]">{proposal.nextMilestone || "待公布"}</dd></div><div className="flex gap-3"><dt className="w-20 shrink-0 text-[#6e6e73]">預計完成</dt><dd className="text-[#1d1d1f]">{proposal.estimatedCompletion || "待公布"}</dd></div></dl></div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mx-auto mt-10 max-w-4xl rounded-[30px] border border-[#e8e8ed] bg-[#f5f5f7] p-8 text-center sm:mt-12 sm:p-14"><p className="odj-eyebrow text-[#f36b3b]">THE SHELF IS OPEN</p><h3 className="font-display mt-4 text-3xl tracking-[-0.04em] sm:text-4xl">目前尚無公開作品。</h3><p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[#6e6e73] sm:text-base">每份作品必須先完成基本資料、支持目標、透明度與三期里程碑，經平台審核後才會在這裡公開。你可以先建立自己的提案草稿。</p><div className="mt-7 flex justify-center"><ProposalEntry label="建立第一份作品" /></div></div>
+            )}
           </div>
         </section>
 
