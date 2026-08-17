@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, Check, Heart, PackageCheck, ShieldCheck, Sunrise, X } from "lucide-react";
+import AuthButton from "@/components/AuthButton";
 import SiteFooter from "@/components/SiteFooter";
 
 /**
@@ -25,7 +26,7 @@ export default function Project() {
   const continueToSponsor = () => { setModalOpen(false); toast("已保留方案（示意）", { description: `已選擇「${current.name}」。正式版本將在此銜接金流與寄送資訊。` }); };
 
   return <div className="min-h-screen bg-[#f7fbfb] text-[#172846]">
-    <header className="sticky top-0 z-30 border-b border-[#bfd6df] bg-[#f8fcfc]/90 backdrop-blur-xl"><div className="container flex h-[72px] items-center justify-between"><a href={homePath} className="inline-flex items-center gap-2 text-sm font-bold text-[#36536c] transition hover:text-[#e15b32]"><ArrowLeft size={18}/> 回到今日啟航</a><a href={homePath} className="flex items-center gap-2"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#e4ab52]/45" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="font-display text-lg font-black tracking-[0.08em] text-[#172846]">老東家</span></a></div></header>
+    <header className="sticky top-0 z-30 border-b border-[#bfd6df] bg-[#f8fcfc]/90 backdrop-blur-xl"><div className="container flex h-[72px] items-center justify-between"><a href={homePath} className="inline-flex items-center gap-2 text-sm font-bold text-[#36536c] transition hover:text-[#e15b32]"><ArrowLeft size={18}/> 回到今日啟航</a><div className="flex items-center gap-3"><div className="hidden sm:block"><AuthButton compact /></div><a href={homePath} className="flex items-center gap-2"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#e4ab52]/45" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="hidden font-display text-lg font-black tracking-[0.08em] sm:inline">老東家</span></a></div></div></header>
     <main className="container py-9 sm:py-14"><div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-14"><div>
       <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs"><span className="sun-stamp border border-[#7facc0] bg-[#172846] px-3 py-1.5 font-semibold tracking-[0.12em] text-[#fffaf3]">今晨精選</span><span className="font-bold text-[#e15b32]">奇幻小說</span><span className="text-[#698396]">邊城製本所</span></div>
       <h1 className="font-display text-4xl font-black leading-[1.22] tracking-[-0.04em] sm:text-6xl">月海檔案：<br/><span className="text-[#f36b3b]">潮汐退去之後</span></h1>

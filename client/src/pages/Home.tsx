@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowDownRight, ArrowUpRight, BookOpen, ChevronRight, Compass, Heart, Menu, PenLine, Sunrise } from "lucide-react";
+import AuthButton from "@/components/AuthButton";
 import SiteFooter from "@/components/SiteFooter";
 
 /**
@@ -32,6 +33,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
         <a className="editorial-link transition hover:text-[#e15b32] hover:underline" href="#how">如何同行</a>
       </nav>
       <div className="flex items-center gap-2">
+        <div className="hidden lg:block"><AuthButton /></div>
         <button onClick={() => toast("提案入口示意", { description: "下一步可串接創作者登入、提案審核與周邊工坊報價。" })} className="hidden rounded-2xl border border-[#f36b3b] px-4 py-2 text-sm font-bold text-[#d9522d] transition hover:-translate-y-0.5 hover:bg-[#f36b3b] hover:text-[#fffaf3] sm:block">我要提案</button>
         <button onClick={onMenu} className="grid h-10 w-10 place-items-center rounded-2xl border border-[#bfd6df] text-[#172846] md:hidden" aria-label="開啟選單"><Menu size={19} /></button>
       </div>
@@ -44,7 +46,7 @@ export default function Home() {
 
   return <div className="min-h-screen overflow-x-hidden bg-[#f7fbfb] text-[#172846]">
     <Header onMenu={() => setMenuOpen(!menuOpen)} />
-    {menuOpen && <div className="fixed inset-x-0 top-[72px] z-30 border-b border-[#bfd6df] bg-[#f8fcfc]/98 p-5 backdrop-blur-xl md:hidden"><div className="space-y-4 font-medium text-[#263f5c]"><a className="block" href="#shelf" onClick={() => setMenuOpen(false)}>今日啟航</a><a className="block" href="#workshop" onClick={() => setMenuOpen(false)}>晨光工坊</a><a className="block" href="#how" onClick={() => setMenuOpen(false)}>如何同行</a><button onClick={() => toast("提案入口示意", { description: "下一步可串接創作者登入與提案資料。" })} className="w-full rounded-2xl bg-[#f36b3b] py-3 font-bold text-[#fffaf3]">我要提案</button></div></div>}
+    {menuOpen && <div className="fixed inset-x-0 top-[72px] z-30 border-b border-[#bfd6df] bg-[#f8fcfc]/98 p-5 backdrop-blur-xl md:hidden"><div className="space-y-4 font-medium text-[#263f5c]"><a className="block" href="#shelf" onClick={() => setMenuOpen(false)}>今日啟航</a><a className="block" href="#workshop" onClick={() => setMenuOpen(false)}>晨光工坊</a><a className="block" href="#how" onClick={() => setMenuOpen(false)}>如何同行</a><AuthButton fullWidth /><button onClick={() => toast("提案入口示意", { description: "下一步可串接創作者登入與提案資料。" })} className="w-full rounded-2xl bg-[#f36b3b] py-3 font-bold text-[#fffaf3]">我要提案</button></div></div>}
 
     <main>
       <section className="relative isolate overflow-hidden border-b border-[#bfd6df] bg-[#eff8f8]">
