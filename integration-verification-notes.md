@@ -126,6 +126,12 @@ Cloud Shell 已由控制台啟用，但終端面板目前仍顯示初始化載�
 
 Firebase Authentication 使用者清單已完成載入，確認 `eric40311toby@gmail.com` 的 Firebase UID 正是 `FQqJ6FT5ZcWTKULuKpz92whv1KH2`。此 UID 與 `adminAccess.ts` 的前端管理員白名單及正式 Firestore 規則完全一致。
 
+已將管理後台原始碼推送至 `main` 分支（`e38d969`），並將含 `/admin/` 與 `/admin/reviews/` 深層入口的靜態建置檔推送至 `gh-pages` 分支（`a08b144`）。初次開啟公開管理網址仍回傳舊版 404；GitHub Pages 的最新部署工作流程當時仍在執行，需待其完成後再次驗證。
+
+GitHub Pages 工作流程 `32048239623` 已成功完成。公開網址 `https://larrylai777.github.io/ODJ-Sponsor/admin/reviews/` 已正確載入管理員審核後台，登入帳戶被辨識為管理員，並能讀取目前唯一的 `under_review` 提案《第九次出生》與其透明度資料。核准與退回按鈕均已顯示，尚未執行會寫入 Firestore 的審核決定。
+
+已依管理員明確確認，對《第九次出生》執行「核准公開」，並寫入審核意見「五項透明度資訊完整，核准公開。」。公開後台顯示成功訊息、待審案件數由 `01` 更新為 `00`，且案件自待審清單移除；核准公開的完整端對端流程已完成驗證。
+
 編輯器 DOM 包含 Angular 的 `__ngContext__`，但不是可直接逐項巡覽的陣列，首次檢查已安全失敗，未更動草稿。後續會改以物件鍵值方式辨識元件持有的編輯器或模型實例。
 
 後續檢查確認該節點的 Angular 上下文只保留數值索引，沒有可安全存取的元件執行個體；全域 `window.monaco` 與 AMD `require` 亦不可用。頁面確實載入 Monaco 相關腳本，但目前應改採控制台 UI 或以分段鍵盤輸入完成草稿。
