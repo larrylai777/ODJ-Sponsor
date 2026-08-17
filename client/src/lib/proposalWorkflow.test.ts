@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canEditProposal, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
+import { canDeleteProposal, canEditProposal, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
 
 const completeProposal = {
   title: "月海檔案",
@@ -22,6 +22,14 @@ describe("proposal workflow", () => {
     expect(canEditProposal("revision_requested")).toBe(true);
     expect(canEditProposal("under_review")).toBe(false);
     expect(canEditProposal("published")).toBe(false);
+  });
+
+  it("只讓草稿與待補件作品刪除，避免刪除已送審或公開中的作品", () => {
+    expect(canDeleteProposal("draft")).toBe(true);
+    expect(canDeleteProposal("revision_requested")).toBe(true);
+    expect(canDeleteProposal("under_review")).toBe(false);
+    expect(canDeleteProposal("published")).toBe(false);
+    expect(canDeleteProposal("completed")).toBe(false);
   });
 
   it("完整的五項透明度與支持金額資料才能送審", () => {

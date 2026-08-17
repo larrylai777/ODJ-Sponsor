@@ -49,3 +49,9 @@ Firebase 規則頁使用 CodeMirror。已確認第一個 CodeMirror 實例是主
 ## GitHub Pages 建立頁與《第九次出生》發布狀態
 
 在公開網址加上 `?release=d34a5e0` 後，首頁當時仍顯示舊版三個作品卡，尚未出現《第九次出生》。公開的 `/project/ninth-birth/` 當時回傳 GitHub Pages 404；但 `gh-pages` 分支的 `project/ninth-birth/index.html` 與 `create/index.html` 均已存在。GitHub Pages 的對應部署仍在建置中，因此應在部署完成後重新驗證首頁、`/project/ninth-birth/` 與 `/create/` 路由。
+
+後續以提交 `43db0d809ed93810af3e80c84d4f91484ec4ae65` 成功完成 Pages 建置。公開首頁已列出《第九次出生》，公開作品頁也改為載入 `/ODJ-Sponsor/media/ninth-birth-cover.png`，不再引用 GitHub Pages 無法提供的 `/manus-storage/` 路徑。公開文字內容可正常取得，且未見瀏覽器主控台錯誤；視覺截圖偶爾回傳空白，仍應以另一個瀏覽器重新載入進行最後交叉確認。
+
+## GitHub Pages 服務端發布異常
+
+2026-08-17 15:06 UTC 後，提交 `41fec53bc12ab31d0f6c8c2d2dc330bd7872fafd` 與 `9c2f9dc4f0cc5a38b5c1cbeecc8183ce7fc62d66` 的 GitHub Pages 工作流程均在 Deploy to GitHub Pages 階段失敗。官方工作流程日誌指出部署建立 API 回傳 HTTP 503「No server is currently available to service your request」，並非靜態產物建置錯誤；官方 GitHub Status 同時通報 API Requests 與 Actions 出現重大可用性問題。最新網站建置已通過，本次公開發布待 GitHub 服務恢復後再重新執行。

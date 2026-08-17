@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, FilePenLine, Heart, LogIn, PackageCheck, PenLine, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, FilePenLine, Heart, LogIn, PackageCheck, PenLine, Pencil, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { collection, doc, onSnapshot, query, serverTimestamp, setDoc, where, type DocumentData } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, where, type DocumentData } from "firebase/firestore";
 import { toast } from "sonner";
 import AuthButton from "@/components/AuthButton";
 import ProposalEntry from "@/components/ProposalEntry";
 import SiteFooter from "@/components/SiteFooter";
 import { auth, db } from "@/lib/firebase";
-import { milestonePlan, proposalStatusLabel, type ProposalFormValues, type ProposalStatus } from "@/lib/proposalWorkflow";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { canDeleteProposal, canEditProposal, milestonePlan, proposalStatusLabel, type ProposalFormValues, type ProposalStatus } from "@/lib/proposalWorkflow";
 
 /** 工作台採作品工作區，而非銷售後台：會員先儲存提案、設定支持金額與五項透明度，再送平台審核。 */
 
@@ -84,12 +85,22 @@ function FormField({ label, hint, children }: { label: string; hint?: string; ch
   return <label className="block text-sm font-semibold text-[#1d1d1f]"><span>{label}</span>{hint ? <span className="mt-1 block text-xs font-normal leading-5 text-[#6e6e73]">{hint}</span> : null}{children}</label>;
 }
 
+function ProposalCard({ proposal, deleting, onRequestDelete }: { proposal: ProposalRecord; deleting: boolean; onRequestDelete: (proposal: ProposalRecord) => void }) {
+  const status = proposal.status || "draft";
+  const editable = canEditProposal(status);
+  const deletable = canDeleteProposal(status);
+
+  return <article className="rounded-2xl bg-white p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="truncate font-semibold">{proposal.title || "未命名作品"}</p><p className="mt-1 text-xs text-[#6e6e73]">{proposal.category || "作品提案"} · 上次編輯 {formatDate(proposal.updatedAt)}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(status)}`}>{proposalStatusLabel[status]}</span></div>{editable ? <div className="mt-4 flex flex-wrap gap-2"><a href={`${basePath}create?draft=${proposal.id}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#172846] px-3 text-sm font-semibold text-white transition hover:bg-[#243d67] active:scale-[0.97]"><Pencil size={15} /> 編輯作品</a>{deletable ? <button type="button" onClick={() => onRequestDelete(proposal)} disabled={deleting} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e8b9b3] bg-white px-3 text-sm font-semibold text-[#b42318] transition hover:bg-[#fff1ef] disabled:cursor-not-allowed disabled:opacity-60"><Trash2 size={15} /> {deleting ? "刪除中" : "刪除"}</button> : null}</div> : <p className="mt-4 text-xs leading-5 text-[#6e6e73]">送審後資料會鎖定；平台要求補件時，才會重新開放編輯或刪除。</p>}</article>;
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [bookmarks, setBookmarks] = useState<BookmarkRecord[]>([]);
   const [pledges, setPledges] = useState<PledgeRecord[]>([]);
   const [proposals, setProposals] = useState<ProposalRecord[]>([]);
+  const [proposalToDelete, setProposalToDelete] = useState<ProposalRecord | null>(null);
+  const [deletingProposalId, setDeletingProposalId] = useState<string | null>(null);
 
   useEffect(() => onAuthStateChanged(auth, (nextUser) => { setUser(nextUser); setReady(true); }), []);
   useEffect(() => { if (!ready || user) return; const timeout = window.setTimeout(() => window.location.assign(basePath), 1800); return () => window.clearTimeout(timeout); }, [ready, user]);
@@ -104,6 +115,24 @@ export default function Dashboard() {
 
   const displayName = useMemo(() => user?.displayName || user?.email?.split("@")[0] || "老東家會員", [user]);
   const initial = displayName.slice(0, 1).toUpperCase();
+  const deleteProposal = async () => {
+    if (!user || !proposalToDelete || deletingProposalId) return;
+    if (!canDeleteProposal(proposalToDelete.status || "draft")) {
+      toast("這份作品目前無法刪除", { description: "只有草稿或平台退回補件的作品可由創作者自行刪除。" });
+      setProposalToDelete(null);
+      return;
+    }
+    setDeletingProposalId(proposalToDelete.id);
+    try {
+      await deleteDoc(doc(db, "proposals", proposalToDelete.id));
+      toast("作品草稿已刪除", { description: "該作品已從你的工作台移除，且不會對外公開。" });
+      setProposalToDelete(null);
+    } catch (error) {
+      toast("刪除失敗", { description: error instanceof Error ? error.message : "請確認登入與網路狀態後再試一次。" });
+    } finally {
+      setDeletingProposalId(null);
+    }
+  };
   if (!ready) return <LoadingPanel />;
   if (!user) return <SignedOutPanel />;
 
@@ -121,7 +150,7 @@ export default function Dashboard() {
 
         <div className="space-y-6">
           <Panel eyebrow="我的作品" title="作品草稿與狀態" icon={<FilePenLine size={20} />} action={<span className="text-sm font-semibold text-[#f36b3b]">{proposals.length.toString().padStart(2, "0")}</span>}>
-            {proposals.length ? <div className="space-y-3">{proposals.map((proposal) => <a key={proposal.id} href={`${basePath}create?draft=${proposal.id}`} className="flex w-full items-center justify-between gap-4 rounded-2xl bg-white p-4 text-left transition hover:bg-[#fff0e8]"><div className="min-w-0"><p className="truncate font-semibold">{proposal.title || "未命名作品"}</p><p className="mt-1 text-xs text-[#6e6e73]">{proposal.category || "作品提案"} · 上次編輯 {formatDate(proposal.updatedAt)}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(proposal.status)}`}>{proposalStatusLabel[proposal.status || "draft"]}</span></a>)}</div> : <div className="rounded-2xl bg-white p-5 text-sm leading-7 text-[#6e6e73]">還沒有作品草稿。從左側建立第一份作品，資料只會鎖定在你的帳號下。</div>}
+            {proposals.length ? <div className="space-y-3">{proposals.map((proposal) => <ProposalCard key={proposal.id} proposal={proposal} deleting={deletingProposalId === proposal.id} onRequestDelete={setProposalToDelete} />)}</div> : <div className="rounded-2xl bg-white p-5 text-sm leading-7 text-[#6e6e73]">還沒有作品草稿。從左側建立第一份作品，資料只會鎖定在你的帳號下。</div>}
           </Panel>
 
           <div className="grid gap-6 md:grid-cols-2">
@@ -131,6 +160,7 @@ export default function Dashboard() {
         </div>
       </div></section>
     </main>
+    <AlertDialog open={Boolean(proposalToDelete)} onOpenChange={(open) => { if (!open && !deletingProposalId) setProposalToDelete(null); }}><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>確定刪除這份作品嗎？</AlertDialogTitle><AlertDialogDescription>「{proposalToDelete?.title || "未命名作品"}」會從你的草稿清單中永久移除。刪除後無法復原，只有草稿或待補件作品可以執行此操作。</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel disabled={Boolean(deletingProposalId)}>取消</AlertDialogCancel><AlertDialogAction disabled={Boolean(deletingProposalId)} onClick={() => void deleteProposal()} className="bg-[#b42318] text-white hover:bg-[#8f1c13]">{deletingProposalId ? "刪除中…" : "確認刪除"}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
     <SiteFooter />
   </div>;
 }

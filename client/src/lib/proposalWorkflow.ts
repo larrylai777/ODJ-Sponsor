@@ -45,6 +45,10 @@ export function canEditProposal(status?: string) {
   return status === "draft" || status === "revision_requested";
 }
 
+export function canDeleteProposal(status?: string) {
+  return status === "draft" || status === "revision_requested";
+}
+
 export function getSubmissionErrors(values: ProposalFormValues) {
   const errors: string[] = [];
   const requiredFields: Array<[keyof ProposalFormValues, string]> = [
