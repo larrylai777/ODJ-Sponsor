@@ -11,7 +11,7 @@ const basePath = import.meta.env.BASE_URL;
 const heroImage = asset("odj-dawn-hero.jpg");
 const projectImage = asset("odj-dawn-project.jpg");
 const workshopImage = asset("odj-dawn-workshop.jpg");
-const ninthBirthCover = "/manus-storage/ninth-birth-cover_8fa0ecbf.png";
+const ninthBirthCover = asset("ninth-birth-cover.png");
 
 const projects = [
   {

@@ -45,3 +45,7 @@ Firebase 規則頁使用 CodeMirror。已確認第一個 CodeMirror 實例是主
 創作者建立頁採用 `proposal-covers/{uid}/{timestamp}-{safeFileName}` 保存封面；前端檢查 JPG、PNG、WebP 與 5MB 上限，Storage 規則草案亦重複強制該限制。使用者已登入 Google 帳號 `eric40311toby@gmail.com` 並可開啟 `odj-sponsor` 專案，但 `https://console.firebase.google.com/project/odj-sponsor/storage/rules` 仍停在工作區載入畫面，尚未取得可發布的 Storage 規則編輯器。
 
 後續確認 Firebase Storage 尚未在 `odj-sponsor` 專案啟用；Firebase Console 顯示目前為 Spark 免付費方案，使用 Storage 需先升級專案定價方案。因此無法在現有方案下發布 Storage 規則或完成會員封面直接上傳的端對端驗證。
+
+## GitHub Pages 建立頁與《第九次出生》發布狀態
+
+在公開網址加上 `?release=d34a5e0` 後，首頁當時仍顯示舊版三個作品卡，尚未出現《第九次出生》。公開的 `/project/ninth-birth/` 當時回傳 GitHub Pages 404；但 `gh-pages` 分支的 `project/ninth-birth/index.html` 與 `create/index.html` 均已存在。GitHub Pages 的對應部署仍在建置中，因此應在部署完成後重新驗證首頁、`/project/ninth-birth/` 與 `/create/` 路由。

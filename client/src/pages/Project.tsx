@@ -50,7 +50,7 @@ const supportOptions: SupportOption[] = [
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
 const homePath = import.meta.env.BASE_URL;
 const projectImage = asset("odj-dawn-project.jpg");
-const ninthBirthCover = "/manus-storage/ninth-birth-cover_8fa0ecbf.png";
+const ninthBirthCover = asset("ninth-birth-cover.png");
 
 const projectsBySlug: Record<string, ProjectProfile> = {
   "moon-archive": {
