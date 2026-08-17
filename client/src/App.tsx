@@ -5,10 +5,11 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import { OfficialPage, PrivacyPage, TermsPage } from "./pages/LegalPages";
 import Project from "./pages/Project";
 
 /**
- * 老東家設計提醒：新台式書店美學，以紙張、墨色、朱紅印章與清楚的履約資訊建立信任。
+ * 老東家設計提醒：晨霧、曙光杏橘與深靛組成可讀的日出航線；官方與法律資訊頁維持清楚、克制且可抵達。
  */
 
 const routePrefix = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -18,6 +19,9 @@ function SiteRouter() {
     <Switch>
       <Route path={`${routePrefix}/`} component={Home} />
       <Route path={`${routePrefix}/project/:slug`} component={Project} />
+      <Route path={`${routePrefix}/about`} component={OfficialPage} />
+      <Route path={`${routePrefix}/privacy`} component={PrivacyPage} />
+      <Route path={`${routePrefix}/terms`} component={TermsPage} />
       <Route path={`${routePrefix}/404`} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

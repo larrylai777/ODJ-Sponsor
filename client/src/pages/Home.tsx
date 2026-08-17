@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowDownRight, ArrowUpRight, BookOpen, ChevronRight, Compass, Heart, Menu, PenLine, Sunrise } from "lucide-react";
+import SiteFooter from "@/components/SiteFooter";
 
 /**
  * 老東家晨光日出設計提醒：此頁以「曙光書航」為核心；霧藍是海平線，杏橘是啟航的光，右側主視覺留給清晨中的書與工作桌。
@@ -89,6 +90,6 @@ export default function Home() {
 
       <section id="how" className="container py-20 sm:py-28"><div className="grid gap-12 lg:grid-cols-[.75fr_1.25fr]"><div><p className="font-mono text-[11px] tracking-[0.18em] text-[#d85c36]">WAYS TO SAIL / 03</p><h2 className="font-display mt-3 text-4xl font-black tracking-[-0.035em] sm:text-5xl">從看見，<br/>到一起抵達。</h2></div><ol className="grid gap-5 sm:grid-cols-3">{[["讀到一束光","先讀故事、看試閱，選擇你想支持的那一份。"],["一起推向海面","在募資期間集結支持，讓作品有足夠的風可以啟航。"],["等它抵達書桌","製作進度公開更新，書與收藏準備好後寄向你的日常。"]].map(([title, text], i) => <li key={title} className="rounded-[22px] border border-[#c9dee5] bg-white/62 p-6"><p className="font-mono text-sm text-[#e15b32]">0{i + 1}</p><h3 className="font-display mt-10 text-2xl font-bold">{title}</h3><p className="mt-3 text-sm leading-7 text-[#617c8f]">{text}</p></li>)}</ol></div></section>
     </main>
-    <footer className="border-t border-[#bfd6df] bg-[#eaf4f5]"><div className="container flex flex-col justify-between gap-6 py-9 sm:flex-row sm:items-end"><div className="flex items-center gap-3"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#e4ab52]/45" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><div><p className="font-display text-lg font-black tracking-[0.08em] text-[#172846]">老東家</p><p className="mt-1 text-xs text-[#688397]">替下一本書，留一盞晨光。</p></div></div><div className="text-xs leading-6 text-[#688397]"><p>ODJ Sponsor Prototype · 僅供產品概念展示</p><p>不處理真實付款、訂單或個人資料。</p></div></div></footer>
+    <SiteFooter />
   </div>;
 }
