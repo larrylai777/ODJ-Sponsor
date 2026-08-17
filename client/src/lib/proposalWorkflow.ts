@@ -2,6 +2,10 @@ export const proposalStatuses = ["draft", "under_review", "revision_requested", 
 
 export type ProposalStatus = (typeof proposalStatuses)[number];
 
+export const reviewDecisions = ["published", "revision_requested"] as const;
+
+export type ReviewDecision = (typeof reviewDecisions)[number];
+
 export type ProposalFormValues = {
   title: string;
   category: string;
@@ -47,6 +51,15 @@ export function canEditProposal(status?: string) {
 
 export function canDeleteProposal(status?: string) {
   return status === "draft" || status === "revision_requested";
+}
+
+export function canReviewProposal(status?: string) {
+  return status === "under_review";
+}
+
+export function getReviewNoteError(decision: ReviewDecision, note: string) {
+  if (decision === "revision_requested" && !note.trim()) return "退回補件時必須提供具體說明";
+  return null;
 }
 
 export function getSubmissionErrors(values: ProposalFormValues) {

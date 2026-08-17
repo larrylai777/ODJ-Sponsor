@@ -6,6 +6,10 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function isAdmin() {
+      return signedIn() && request.auth.uid == 'FQqJ6FT5ZcWTKULuKpz92whv1KH2';
+    }
+
     function owns(uid) {
       return signedIn() && request.auth.uid == uid;
     }
@@ -34,6 +38,20 @@ service cloud.firestore {
         && request.resource.data.status == 'under_review';
     }
 
+    function adminReviewsProposal() {
+      return resource.data.status == 'under_review'
+        && request.resource.data.status in ['published', 'revision_requested']
+        && request.resource.data.authorUid == resource.data.authorUid
+        && request.resource.data.reviewedByUid == request.auth.uid
+        && request.resource.data.reviewedAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.reviewNote is string
+        && request.resource.data.reviewNote.size() > 0
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'reviewNote', 'reviewedByUid', 'reviewedAt', 'updatedAt'
+        ]);
+    }
+
     match /users/{uid} {
       allow read, create, update: if owns(uid);
       allow delete: if false;
@@ -49,14 +67,15 @@ service cloud.firestore {
     }
 
     match /proposals/{proposalId} {
-      allow read: if publicProposal() || ownsProposal();
+      allow read: if publicProposal() || ownsProposal() || isAdmin();
       allow create: if signedIn()
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.status == 'draft'
         && request.resource.data.totalRaised == 0;
-      allow update: if ownsProposal()
-        && authorKeepsFundingFields()
-        && (authorEditsDraft() || authorSubmitsForReview());
+      allow update: if (ownsProposal()
+          && authorKeepsFundingFields()
+          && (authorEditsDraft() || authorSubmitsForReview()))
+        || (isAdmin() && adminReviewsProposal());
       allow delete: if ownsProposal() && resource.data.status in ['draft', 'revision_requested'];
     }
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canDeleteProposal, canEditProposal, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
+import { canDeleteProposal, canEditProposal, canReviewProposal, getReviewNoteError, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
 
 const completeProposal = {
   title: "月海檔案",
@@ -30,6 +30,15 @@ describe("proposal workflow", () => {
     expect(canDeleteProposal("under_review")).toBe(false);
     expect(canDeleteProposal("published")).toBe(false);
     expect(canDeleteProposal("completed")).toBe(false);
+  });
+
+  it("只允許管理員審核送審中的作品，且退回補件必須留下理由", () => {
+    expect(canReviewProposal("under_review")).toBe(true);
+    expect(canReviewProposal("draft")).toBe(false);
+    expect(canReviewProposal("published")).toBe(false);
+    expect(getReviewNoteError("revision_requested", "")).toBe("退回補件時必須提供具體說明");
+    expect(getReviewNoteError("revision_requested", "請補上預算分配細節")).toBeNull();
+    expect(getReviewNoteError("published", "審核通過")).toBeNull();
   });
 
   it("完整的五項透明度與支持金額資料才能送審", () => {
