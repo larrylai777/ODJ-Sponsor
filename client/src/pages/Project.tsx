@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Check, ChevronDown, Heart, PackageCheck, ShieldCheck, Sparkles, X } from "lucide-react";
 
 /**
- * 老東家設計提醒：專案頁像出版目錄與收據並列；以作品、回饋與履約資訊建立清楚的信任節奏。
+ * 老東家設計提醒：專案頁像出版目錄與收據並列；日出 Logo 使用 40px 正方形圓角徽章，以作品、回饋與履約資訊建立清楚的信任節奏。
  */
 
 const rewardOptions = [
@@ -26,7 +26,7 @@ export default function Project() {
   };
 
   return <div className="min-h-screen bg-[#fbf8ef] text-[#29221e]">
-    <header className="sticky top-0 z-30 border-b border-[#d8cdbb] bg-[#fbf8ef]/95 backdrop-blur"><div className="container flex h-[72px] items-center justify-between"><a href={homePath} className="inline-flex items-center gap-2 text-sm font-semibold transition hover:text-[#b84236]"><ArrowLeft size={18}/> 回到今日書架</a><a href={homePath} className="flex items-center gap-2"><img className="h-8 w-[52px] shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="font-display text-lg font-black tracking-[0.08em]">老東家</span></a></div></header>
+    <header className="sticky top-0 z-30 border-b border-[#d8cdbb] bg-[#fbf8ef]/95 backdrop-blur"><div className="container flex h-[72px] items-center justify-between"><a href={homePath} className="inline-flex items-center gap-2 text-sm font-semibold transition hover:text-[#b84236]"><ArrowLeft size={18}/> 回到今日書架</a><a href={homePath} className="flex items-center gap-2"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="font-display text-lg font-black tracking-[0.08em]">老東家</span></a></div></header>
     <main className="container py-9 sm:py-14"><div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-14"><div>
       <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs"><span className="stamp border border-[#e1b6a8] bg-[#183454] px-3 py-1.5 font-semibold tracking-[0.12em] text-[#fff9ed]">主編選書</span><span className="font-semibold text-[#a23b33]">奇幻小說</span><span className="text-[#74675e]">邊城製本所</span></div>
       <h1 className="font-display text-4xl font-black leading-[1.25] tracking-[-0.04em] sm:text-6xl">月海檔案：<br/>潮汐退去之後</h1>

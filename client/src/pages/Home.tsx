@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { ArrowDownRight, ArrowUpRight, BookOpen, Check, ChevronRight, Compass, Heart, Menu, PenLine, Search, Sparkles, X } from "lucide-react";
 
 /**
- * 老東家設計提醒：掌櫃的書案——首頁像一張有信任資訊的書案；故事先於交易，朱紅印章才是動作焦點。
+ * 老東家設計提醒：掌櫃的書案——首頁像一張有信任資訊的書案；日出 Logo 使用 40px 正方形圓角徽章，故事先於交易，朱紅印章才是動作焦點。
  */
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
@@ -26,7 +26,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
     <header className="sticky top-0 z-40 border-b paper-rule bg-[#fbf8ef]/92 backdrop-blur-md">
       <div className="container flex h-[72px] items-center justify-between gap-6">
         <a href={basePath} className="group flex items-center gap-3" aria-label="回到老東家首頁">
-          <img className="h-8 w-[52px] shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20 transition-transform duration-200 group-hover:-translate-y-0.5" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
+          <img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20 transition-transform duration-200 group-hover:-translate-y-0.5" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示" />
           <div className="leading-none"><p className="font-display text-[22px] font-black tracking-[0.08em]">老東家</p><p className="mt-1 font-mono text-[9px] tracking-[0.14em] text-[#a03a32]">ODJ SPONSOR</p></div>
         </a>
         <nav className="hidden items-center gap-7 text-sm font-medium md:flex" aria-label="主要導覽">
@@ -103,7 +103,7 @@ export default function Home() {
 
         <section id="how" className="container py-20 sm:py-28"><div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]"><div><p className="font-mono text-[11px] tracking-[0.18em] text-[#a33e34]">HOW IT WORKS / 03</p><h2 className="font-display mt-3 text-4xl font-black tracking-[-0.035em] sm:text-5xl">從想讀，<br/>到成冊。</h2></div><ol className="grid gap-6 sm:grid-cols-3">{[["讀到心動","瀏覽專案故事、試閱與回饋方案，選擇你想收藏的那一份。"],["一起達標","在募資期限內集結支持；未達標時，這筆款項不會成立。"],["等待寄來","製作進度公開更新，書與周邊完成後，寄到你的書桌。"]].map(([title, text], i) => <li key={title} className="border-t-2 border-[#25201c] pt-5"><p className="font-mono text-sm text-[#a33e34]">0{i + 1}</p><h3 className="font-display mt-6 text-2xl font-bold">{title}</h3><p className="mt-3 text-sm leading-7 text-[#6d625a]">{text}</p></li>)}</ol></div></section>
       </main>
-      <footer className="border-t paper-rule bg-[#f0e7d7]"><div className="container flex flex-col justify-between gap-6 py-9 sm:flex-row sm:items-end"><div className="flex items-center gap-3"><img className="h-8 w-[52px] shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><div><p className="font-display text-lg font-black tracking-[0.08em]">老東家</p><p className="mt-1 text-xs text-[#70645a]">故事得有人先相信。</p></div></div><div className="text-xs leading-6 text-[#756a60]"><p>ODJ Sponsor Prototype · 僅供產品概念展示</p><p>不處理真實付款、訂單或個人資料。</p></div></div></footer>
+      <footer className="border-t paper-rule bg-[#f0e7d7]"><div className="container flex flex-col justify-between gap-6 py-9 sm:flex-row sm:items-end"><div className="flex items-center gap-3"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center shadow-sm ring-1 ring-[#d49f48]/20" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><div><p className="font-display text-lg font-black tracking-[0.08em]">老東家</p><p className="mt-1 text-xs text-[#70645a]">故事得有人先相信。</p></div></div><div className="text-xs leading-6 text-[#756a60]"><p>ODJ Sponsor Prototype · 僅供產品概念展示</p><p>不處理真實付款、訂單或個人資料。</p></div></div></footer>
     </div>
   );
 }
