@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* 老東家設計提醒：掌櫃的書案——米白宣紙為底、朱紅作落款、深墨承載閱讀；避免科技感與過度圓角。 */
+/* 老東家設計提醒：掌櫃的書案——米白宣紙為底、朱紅作落款、深墨承載閱讀；所有操作按鈕採克制的 16px 圓角，資訊版面仍保留方正書案秩序。 */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -43,7 +43,7 @@
   --chart-3: oklch(0.64 0.11 65);
   --chart-4: oklch(0.48 0.07 143);
   --chart-5: oklch(0.73 0.05 83);
-  --radius: 0.25rem;
+  --radius: 1rem;
   --background: oklch(0.97 0.012 85);
   --foreground: oklch(0.235 0.016 62);
   --card: oklch(0.992 0.006 85);
@@ -73,6 +73,7 @@
     background-size: 7px 7px;
   }
   button:not(:disabled), [role="button"]:not([aria-disabled="true"]), a[href], select:not(:disabled) { @apply cursor-pointer; }
+  button, [role="button"] { border-radius: var(--radius); }
 }
 
 @layer components {

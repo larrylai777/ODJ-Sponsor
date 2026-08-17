@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
 
+/** 老東家設計提醒：錯誤狀態的復原操作也維持圓角按鈕規則。 */
 interface Props {
   children: ReactNode;
 }
@@ -42,7 +43,7 @@ class ErrorBoundary extends Component<Props, State> {
             <button
               onClick={() => window.location.reload()}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg",
+                "flex items-center gap-2 px-4 py-2 rounded-2xl",
                 "bg-primary text-primary-foreground",
                 "hover:opacity-90 cursor-pointer"
               )}
