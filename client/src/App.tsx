@@ -16,28 +16,48 @@ import Project from "./pages/Project";
 
 const routePrefix = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
 const rallyBrandUrl = "https://store.line.me/search/zh-Hant?q=%E6%8B%89%E5%8A%9B%E4%B8%80%E6%96%B9";
+const calmCatChannelUrl = "https://youtube.com/@calm_cat_channel?si=1VLQJ9lvOkUBzsX7";
 
-function MobileBrandLink() {
+function ExternalBrandLinks() {
   useEffect(() => {
-    const addBrandLink = () => {
+    const addBrandLinks = () => {
       const facebookLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href*="facebook.com"]')).filter((link) => link.closest("header") || link.closest(".fixed")?.className.includes("top-[52px]"));
       facebookLinks.forEach((facebookLink) => {
-        const nextLink = facebookLink.nextElementSibling as HTMLAnchorElement | null;
-        if (nextLink?.getAttribute("data-rally-brand") === "true" || nextLink?.getAttribute("href") === rallyBrandUrl) return;
-        const brandLink = document.createElement("a");
-        brandLink.href = rallyBrandUrl;
-        brandLink.target = "_blank";
-        brandLink.rel = "noreferrer";
-        brandLink.dataset.rallyBrand = "true";
-        brandLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
-        brandLink.textContent = "拉力一方 LINE STORE ↗";
-        facebookLink.insertAdjacentElement("afterend", brandLink);
+        const container = facebookLink.parentElement;
+        let insertionPoint: HTMLAnchorElement = facebookLink;
+        const existingRallyLink = Array.from(container?.querySelectorAll<HTMLAnchorElement>("a") ?? []).find((link) => link.href === rallyBrandUrl);
+
+        if (existingRallyLink) {
+          insertionPoint = existingRallyLink;
+        } else {
+          const brandLink = document.createElement("a");
+          brandLink.href = rallyBrandUrl;
+          brandLink.target = "_blank";
+          brandLink.rel = "noreferrer";
+          brandLink.dataset.rallyBrand = "true";
+          brandLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
+          brandLink.textContent = "拉力一方 LINE STORE ↗";
+          facebookLink.insertAdjacentElement("afterend", brandLink);
+          insertionPoint = brandLink;
+        }
+
+        const hasCalmCatChannel = Array.from(container?.querySelectorAll<HTMLAnchorElement>("a") ?? []).some((link) => link.href === calmCatChannelUrl);
+        if (hasCalmCatChannel) return;
+
+        const channelLink = document.createElement("a");
+        channelLink.href = calmCatChannelUrl;
+        channelLink.target = "_blank";
+        channelLink.rel = "noreferrer";
+        channelLink.dataset.calmCatChannel = "true";
+        channelLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
+        channelLink.textContent = "寧靜喵頻道 ↗";
+        insertionPoint.insertAdjacentElement("afterend", channelLink);
       });
     };
 
-    const observer = new MutationObserver(addBrandLink);
+    const observer = new MutationObserver(addBrandLinks);
     observer.observe(document.body, { childList: true, subtree: true });
-    addBrandLink();
+    addBrandLinks();
     return () => observer.disconnect();
   }, []);
 
@@ -80,7 +100,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <SiteRouter />
-          <MobileBrandLink />
+          <ExternalBrandLinks />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
