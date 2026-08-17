@@ -50,7 +50,7 @@ function ExternalBrandLinks() {
         channelLink.rel = "noreferrer";
         channelLink.dataset.calmCatChannel = "true";
         channelLink.className = facebookLink.className || "flex items-center gap-1 text-[#424245] transition hover:text-[#f36b3b]";
-        channelLink.textContent = "寧靜喵頻道 ↗";
+        channelLink.textContent = "寧靜喵 YouTube 頻道 ↗";
         insertionPoint.insertAdjacentElement("afterend", channelLink);
       });
     };

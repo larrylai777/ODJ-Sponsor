@@ -1,9 +1,25 @@
-/** Apple 式產品敘事提醒：頁尾以低對比灰底與緊湊分欄承接資訊；保留日出徽章與台北黑體，讓法律與官方連結清楚而不搶走內容主舞台。 */
+/** Apple 式產品敘事提醒：頁尾收束為低干擾的深色資訊列；以細分隔線、台北黑體與平行法律連結，讓晨光日出品牌在內容結尾保持克制、明確。 */
 
-const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
 const basePath = import.meta.env.BASE_URL;
 const facebookUrl = "https://www.facebook.com/share/19TwFNqfoG/?mibextid=wwXIfr";
 
 export default function SiteFooter() {
-  return <footer className="bg-[#f5f5f7] text-[#424245]"><div className="container grid gap-10 py-12 lg:grid-cols-[1.3fr_.8fr_.8fr]"><div><a href={basePath} className="inline-flex items-center gap-3" aria-label="回到老東家首頁"><img className="size-10 shrink-0 rounded-[14px] object-cover object-center" src={asset("odj-sunrise-icon.png")} alt="老東家日出圖示"/><span className="font-display text-xl tracking-[-0.02em] text-[#1d1d1f]">老東家</span></a><p className="mt-4 max-w-sm text-sm leading-6 text-[#6e6e73]">ODJ Sponsor 是為華文小說與衍生周邊規劃的群眾支持平台原型。讓下一本書，正式亮相。</p></div><div><p className="odj-eyebrow text-[#6e6e73]">探索老東家</p><div className="mt-4 space-y-3 text-sm"><a className="block transition hover:text-[#f36b3b]" href={`${basePath}about`}>關於老東家</a><a className="block transition hover:text-[#f36b3b]" href={`${basePath}#shelf`}>探索作品</a><a className="block transition hover:text-[#f36b3b]" href={`${basePath}#workshop`}>創作者工作台</a><a className="block transition hover:text-[#f36b3b]" href={facebookUrl} target="_blank" rel="noreferrer">Facebook 官方社群</a></div></div><div><p className="odj-eyebrow text-[#6e6e73]">政策與聲明</p><div className="mt-4 space-y-3 text-sm"><a className="block transition hover:text-[#f36b3b]" href={`${basePath}privacy`}>隱私權政策</a><a className="block transition hover:text-[#f36b3b]" href={`${basePath}terms`}>網站使用條款</a><a className="block font-semibold text-[#172846] transition hover:text-[#f36b3b]" href={facebookUrl} target="_blank" rel="noreferrer">聯絡我們</a><p className="pt-1 text-xs leading-6 text-[#6e6e73]">已開放 Google 登入、會員工作台與提案草稿；尚未開啟付款、訂單、配送或真實審核。</p></div></div></div><div className="border-t border-[#d2d2d7]"><div className="container flex flex-col justify-between gap-2 py-5 text-xs leading-6 text-[#6e6e73] sm:flex-row"><p>© 2026 老東家 ODJ Sponsor</p><p>本網站內容僅供概念展示，不構成付款邀約或交易要約。</p></div></div></footer>;
+  return (
+    <footer className="border-t border-white/10 bg-black text-white">
+      <div className="container flex flex-col gap-3 py-5 text-xs leading-5 text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 老東家 ODJ Sponsor</p>
+        <nav aria-label="頁尾政策與聯絡連結" className="flex flex-wrap items-center gap-x-5 gap-y-1">
+          <a className="transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none" href={`${basePath}privacy`}>
+            隱私權政策
+          </a>
+          <a className="transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none" href={`${basePath}terms`}>
+            網站使用條款
+          </a>
+          <a className="transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none" href={facebookUrl} target="_blank" rel="noreferrer">
+            聯絡我們
+          </a>
+        </nav>
+      </div>
+    </footer>
+  );
 }
