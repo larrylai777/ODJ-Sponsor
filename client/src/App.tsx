@@ -20,10 +20,15 @@ function SiteRouter() {
     <Switch>
       <Route path={`${routePrefix}/`} component={Home} />
       <Route path={`${routePrefix}/dashboard`} component={Dashboard} />
+      <Route path={`${routePrefix}/dashboard/`} component={Dashboard} />
       <Route path={`${routePrefix}/project/:slug`} component={Project} />
+      <Route path={`${routePrefix}/project/:slug/`} component={Project} />
       <Route path={`${routePrefix}/about`} component={OfficialPage} />
+      <Route path={`${routePrefix}/about/`} component={OfficialPage} />
       <Route path={`${routePrefix}/privacy`} component={PrivacyPage} />
+      <Route path={`${routePrefix}/privacy/`} component={PrivacyPage} />
       <Route path={`${routePrefix}/terms`} component={TermsPage} />
+      <Route path={`${routePrefix}/terms/`} component={TermsPage} />
       <Route path={`${routePrefix}/404`} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
