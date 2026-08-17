@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowDown, ArrowRight, ArrowUpRight, ExternalLink, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
 import AuthButton from "@/components/AuthButton";
 import ProposalEntry from "@/components/ProposalEntry";
 import SiteFooter from "@/components/SiteFooter";
@@ -108,16 +108,47 @@ export default function Home() {
   const featured = visibleProjects[0] ?? projects[0];
   const supportingProjects = visibleProjects.filter((project) => project.id !== featured.id);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-[#1d1d1f]">
       <Header onMenu={() => setMenuOpen(!menuOpen)} />
       {menuOpen && (
-        <div className="fixed inset-x-0 top-[52px] z-30 border-b border-[#d2d2d7] bg-white/98 p-5 backdrop-blur-xl lg:hidden">
-          <div className="space-y-4 text-sm font-medium text-[#424245]">
-            <a className="block" href="#shelf" onClick={() => setMenuOpen(false)}>探索作品</a>
-            <a className="block" href="#workshop" onClick={() => setMenuOpen(false)}>創作者工作台</a>
-            <a className="block" href="#how" onClick={() => setMenuOpen(false)}>支持方式</a>
-            <p className="border-t border-[#e8e8ed] pt-4 text-xs font-normal leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。</p>
+        <div className="fixed inset-0 z-50 flex min-h-dvh flex-col bg-[#f5f5f7] lg:hidden" role="dialog" aria-modal="true" aria-label="主要導覽選單">
+          <div className="container flex h-[52px] items-center justify-between border-b border-[#d2d2d7]/80">
+            <a href={basePath} onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5" aria-label="回到老東家首頁">
+              <img className="size-9 rounded-[12px] object-cover object-center" src={asset("odj-sunrise-icon.png")} alt="" />
+              <span className="font-display text-[18px] tracking-[-0.02em] text-[#1d1d1f]">老東家</span>
+            </a>
+            <button type="button" onClick={() => setMenuOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-white text-[#1d1d1f] shadow-sm transition hover:bg-[#e8e8ed] active:scale-[0.97]" aria-label="關閉選單">
+              <X size={19} />
+            </button>
+          </div>
+          <div className="container flex flex-1 flex-col justify-between py-10 sm:py-14">
+            <nav className="space-y-1" aria-label="手機版主要導覽">
+              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#shelf" onClick={() => setMenuOpen(false)}>探索作品</a>
+              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#workshop" onClick={() => setMenuOpen(false)}>創作者工作台</a>
+              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#how" onClick={() => setMenuOpen(false)}>支持方式</a>
+            </nav>
+            <div className="mt-10 border-t border-[#d2d2d7] pt-5">
+              <a href={`${basePath}dashboard`} onClick={() => setMenuOpen(false)} className="inline-flex items-center rounded-2xl bg-[#f36b3b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">進入創作者工作台</a>
+              <p className="mt-5 max-w-sm text-xs leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。按 Esc 或右上角按鈕可關閉選單。</p>
+            </div>
           </div>
         </div>
       )}
