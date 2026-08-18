@@ -12,27 +12,15 @@ export const relatedBrandLinks = [
   { label: "比爸小說", href: bdNovelUrl },
 ] as const;
 
+export const footerSectionOrder = ["相關品牌", "政策與聯絡"] as const;
+
 const footerLinkClassName = "transition-colors duration-150 hover:text-white focus-visible:text-white focus-visible:outline-none";
 
 export default function SiteFooter() {
   return (
     <footer className="border-t border-white/10 bg-black text-white">
       <div className="container flex flex-col gap-4 py-5 text-xs leading-5 text-white/50 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
-          <p>© 2026 老東家 ODJ Sponsor</p>
-          <nav aria-label="頁尾政策與聯絡連結" className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span className="text-white/35">政策與聯絡</span>
-            <a className={footerLinkClassName} href={`${basePath}privacy`}>
-            隱私權政策
-            </a>
-            <a className={footerLinkClassName} href={`${basePath}terms`}>
-            網站使用條款
-            </a>
-            <a className={footerLinkClassName} href={facebookUrl} target="_blank" rel="noreferrer">
-            聯絡我們
-            </a>
-          </nav>
-        </div>
+        <p className="sm:mr-auto">© 2026 老東家 ODJ Sponsor</p>
 
         <nav aria-label="相關品牌連結" className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span className="text-white/35">相關品牌</span>
@@ -41,6 +29,19 @@ export default function SiteFooter() {
               {brand.label}
             </a>
           ))}
+        </nav>
+
+        <nav aria-label="頁尾政策與聯絡連結" className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span className="text-white/35">政策與聯絡</span>
+          <a className={footerLinkClassName} href={`${basePath}privacy`}>
+            隱私權政策
+          </a>
+          <a className={footerLinkClassName} href={`${basePath}terms`}>
+            網站使用條款
+          </a>
+          <a className={footerLinkClassName} href={facebookUrl} target="_blank" rel="noreferrer">
+            聯絡我們
+          </a>
         </nav>
       </div>
     </footer>
