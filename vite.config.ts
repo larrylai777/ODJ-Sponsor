@@ -203,13 +203,23 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === "true" || process.env.GITHUB_PAGES === "true";
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  // GitHub Pages 是純靜態網站；避免執行期注入覆蓋 Vite 產出的 #root 掛載節點。
+  ...(isGitHubPagesBuild ? [] : [vitePluginManusRuntime()]),
+  vitePluginManusDebugCollector(),
+  vitePluginStorageProxy(),
+];
 
 export default defineConfig({
   // 老東家設計提醒：GitHub Pages 以 /ODJ-Sponsor/ 子路徑提供網站；本機開發仍維持根路徑。
   // 老東家 GitHub Pages 部署在專案子路徑；手動發布與 Actions 建置都必須保留此前綴。
   base:
-    process.env.GITHUB_ACTIONS === "true" || process.env.GITHUB_PAGES === "true"
+    isGitHubPagesBuild
       ? "/ODJ-Sponsor/"
       : "/",
   plugins,
