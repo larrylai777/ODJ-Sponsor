@@ -53,6 +53,24 @@ export function canDeleteProposal(status?: string) {
   return status === "draft" || status === "revision_requested";
 }
 
+export function getCreatorProposalAction(status?: string) {
+  if (status === "revision_requested") {
+    return {
+      label: "修改後重新送審",
+      description: "請依管理員意見完成補正，再由建立頁重新送審。",
+    };
+  }
+
+  if (status === "draft") {
+    return {
+      label: "繼續編輯",
+      description: "完成資料後，可在建立頁送交平台審核。",
+    };
+  }
+
+  return null;
+}
+
 export function canReviewProposal(status?: string) {
   return status === "under_review";
 }

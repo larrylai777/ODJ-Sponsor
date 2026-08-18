@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canDeleteProposal, canEditProposal, canReviewProposal, getReviewNoteError, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
+import { canDeleteProposal, canEditProposal, canReviewProposal, getCreatorProposalAction, getReviewNoteError, getStepErrors, getSubmissionErrors, isSubmissionReady, milestonePlan } from "./proposalWorkflow";
 
 const completeProposal = {
   title: "月海檔案",
@@ -30,6 +30,13 @@ describe("proposal workflow", () => {
     expect(canDeleteProposal("under_review")).toBe(false);
     expect(canDeleteProposal("published")).toBe(false);
     expect(canDeleteProposal("completed")).toBe(false);
+  });
+
+  it("待補件作品提供修改後重新送審入口，其餘鎖定狀態不顯示創作者操作", () => {
+    expect(getCreatorProposalAction("draft")).toMatchObject({ label: "繼續編輯" });
+    expect(getCreatorProposalAction("revision_requested")).toMatchObject({ label: "修改後重新送審" });
+    expect(getCreatorProposalAction("under_review")).toBeNull();
+    expect(getCreatorProposalAction("published")).toBeNull();
   });
 
   it("只允許管理員審核送審中的作品，且退回補件必須留下理由", () => {

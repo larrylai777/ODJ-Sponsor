@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, Heart, LogIn, PackageCheck, PenLine, Pencil, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, FilePenLine, Heart, LogIn, MessageSquareText, PackageCheck, PenLine, Pencil, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { collection, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, where, type DocumentData } from "firebase/firestore";
 import { toast } from "sonner";
@@ -8,7 +8,8 @@ import ProposalEntry from "@/components/ProposalEntry";
 import SiteFooter from "@/components/SiteFooter";
 import { auth, db } from "@/lib/firebase";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { canDeleteProposal, canEditProposal, milestonePlan, proposalStatusLabel, type ProposalFormValues, type ProposalStatus } from "@/lib/proposalWorkflow";
+import { canDeleteProposal, canEditProposal, getCreatorProposalAction, milestonePlan, proposalStatusLabel, type ProposalFormValues, type ProposalStatus } from "@/lib/proposalWorkflow";
+import { getFundingProgress } from "@/lib/publicProposals";
 
 /** 工作台採作品工作區，而非銷售後台：會員先儲存提案、設定支持金額與五項透明度，再送平台審核。 */
 
@@ -21,6 +22,7 @@ type ProposalRecord = Partial<ProposalFormValues> & {
   coverUrl?: string;
   reviewNote?: string;
   totalRaised?: number;
+  reviewedAt?: { toDate?: () => Date };
   createdAt?: { toDate?: () => Date };
   updatedAt?: { toDate?: () => Date };
 };
@@ -89,8 +91,11 @@ function ProposalCard({ proposal, deleting, onRequestDelete }: { proposal: Propo
   const status = proposal.status || "draft";
   const editable = canEditProposal(status);
   const deletable = canDeleteProposal(status);
+  const creatorAction = getCreatorProposalAction(status);
+  const funding = getFundingProgress(proposal);
+  const isPubliclyFundable = status === "published" || status === "paused" || status === "completed";
 
-  return <article className="rounded-2xl bg-white p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="truncate font-semibold">{proposal.title || "未命名作品"}</p><p className="mt-1 text-xs text-[#6e6e73]">{proposal.category || "作品提案"} · 上次編輯 {formatDate(proposal.updatedAt)}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(status)}`}>{proposalStatusLabel[status]}</span></div>{editable ? <div className="mt-4 flex flex-wrap gap-2"><a href={`${basePath}create?draft=${proposal.id}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#172846] px-3 text-sm font-semibold text-white transition hover:bg-[#243d67] active:scale-[0.97]"><Pencil size={15} /> 編輯作品</a>{deletable ? <button type="button" onClick={() => onRequestDelete(proposal)} disabled={deleting} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e8b9b3] bg-white px-3 text-sm font-semibold text-[#b42318] transition hover:bg-[#fff1ef] disabled:cursor-not-allowed disabled:opacity-60"><Trash2 size={15} /> {deleting ? "刪除中" : "刪除"}</button> : null}</div> : <p className="mt-4 text-xs leading-5 text-[#6e6e73]">送審後資料會鎖定；平台要求補件時，才會重新開放編輯或刪除。</p>}</article>;
+  return <article className="rounded-2xl bg-white p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="truncate font-semibold">{proposal.title || "未命名作品"}</p><p className="mt-1 text-xs text-[#6e6e73]">{proposal.category || "作品提案"} · 上次編輯 {formatDate(proposal.updatedAt)}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(status)}`}>{proposalStatusLabel[status]}</span></div>{proposal.reviewNote?.trim() ? <div className="mt-4 rounded-2xl border border-[#f1d6bc] bg-[#fff8f2] p-3.5"><div className="flex items-center gap-2 text-xs font-semibold text-[#9a4d20]"><MessageSquareText size={15} /> 管理員意見{proposal.reviewedAt ? ` · ${formatDate(proposal.reviewedAt)}` : ""}</div><p className="mt-2 text-sm leading-6 text-[#5c4a3f]">{proposal.reviewNote}</p></div> : status === "revision_requested" ? <div className="mt-4 rounded-2xl border border-[#f1d6bc] bg-[#fff8f2] p-3.5 text-sm leading-6 text-[#5c4a3f]">平台已要求補件。請開啟作品，依意見修正後重新送審。</div> : null}<div className="mt-4 rounded-2xl bg-[#f5f5f7] p-3.5"><div className="flex items-center justify-between gap-3"><span className="text-xs font-semibold text-[#424245]">{isPubliclyFundable ? "目前募得金額" : "作品募資進度"}</span><span className="text-xs font-semibold text-[#172846]">{funding.percentage}%</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e2e2e6]"><div className="h-full rounded-full bg-[#f36b3b] transition-[width] duration-300" style={{ width: `${funding.barPercentage}%` }} /></div><div className="mt-2 flex items-center justify-between gap-3 text-xs text-[#6e6e73]"><span>{formatCurrency(funding.raised)} ／ {formatCurrency(funding.target)}</span><span>{isPubliclyFundable ? "讀者支持累計" : "公開後開放支持"}</span></div></div>{editable && creatorAction ? <div className="mt-4 flex flex-wrap gap-2"><a href={`${basePath}create?draft=${proposal.id}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#172846] px-3 text-sm font-semibold text-white transition hover:bg-[#243d67] active:scale-[0.97]" title={creatorAction.description}><Pencil size={15} /> {creatorAction.label}</a>{deletable ? <button type="button" onClick={() => onRequestDelete(proposal)} disabled={deleting} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e8b9b3] bg-white px-3 text-sm font-semibold text-[#b42318] transition hover:bg-[#fff1ef] disabled:cursor-not-allowed disabled:opacity-60"><Trash2 size={15} /> {deleting ? "刪除中" : "刪除"}</button> : null}</div> : <p className="mt-4 text-xs leading-5 text-[#6e6e73]">送審後資料會鎖定；平台要求補件時，才會重新開放編輯或刪除。</p>}</article>;
 }
 
 export default function Dashboard() {
