@@ -12,6 +12,13 @@ import { getFundingProgress, selectPublishedProposals, type PublicProposal } fro
 const asset = (name: string) => `${import.meta.env.BASE_URL}media/${name}`;
 const basePath = import.meta.env.BASE_URL;
 
+export const mobileMenuLinks = [
+  { label: "進入創作者工作台", href: `${basePath}dashboard` },
+  { label: "探索作品", href: "#shelf" },
+  { label: "創作者工作台", href: "#workshop" },
+  { label: "支持方式", href: "#how" },
+] as const;
+
 function ProposalCover({ coverUrl, title }: { coverUrl?: string; title?: string }) {
   const [failed, setFailed] = useState(!coverUrl || coverUrl.includes("facebook.com/share/"));
 
@@ -126,18 +133,17 @@ export default function Home() {
               <img className="size-9 rounded-[12px] object-cover object-center" src={asset("odj-sunrise-icon.png")} alt="" />
               <span className="font-display text-[18px] tracking-[-0.02em] text-[#1d1d1f]">老東家</span>
             </a>
-            <div className="flex items-center gap-2">
-              <a href={`${basePath}dashboard`} onClick={() => setMenuOpen(false)} className="inline-flex h-9 items-center rounded-2xl bg-[#f36b3b] px-3.5 text-xs font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]">進入創作者工作台</a>
-              <button type="button" onClick={() => setMenuOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-white text-[#1d1d1f] shadow-sm transition hover:bg-[#e8e8ed] active:scale-[0.97]" aria-label="關閉選單">
-                <X size={19} />
-              </button>
-            </div>
+            <button type="button" onClick={() => setMenuOpen(false)} className="grid size-9 place-items-center rounded-2xl bg-white text-[#1d1d1f] shadow-sm transition hover:bg-[#e8e8ed] active:scale-[0.97]" aria-label="關閉選單">
+              <X size={19} />
+            </button>
           </div>
           <div className="container flex flex-1 flex-col justify-between py-10 sm:py-14">
             <nav className="space-y-1" aria-label="手機版主要導覽">
-              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#shelf" onClick={() => setMenuOpen(false)}>探索作品</a>
-              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#workshop" onClick={() => setMenuOpen(false)}>創作者工作台</a>
-              <a className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href="#how" onClick={() => setMenuOpen(false)}>支持方式</a>
+              {mobileMenuLinks.map((link) => (
+                <a key={link.label} className="block border-b border-[#d2d2d7] py-5 font-display text-4xl tracking-[-0.045em] text-[#1d1d1f] transition hover:text-[#f36b3b]" href={link.href} onClick={() => setMenuOpen(false)}>
+                  {link.label}
+                </a>
+              ))}
             </nav>
             <div className="mt-10 border-t border-[#d2d2d7] pt-5">
               <p className="max-w-sm text-xs leading-5 text-[#6e6e73]">外部品牌與聯絡方式收納於頁尾。按 Esc 或右上角按鈕可關閉選單。</p>
