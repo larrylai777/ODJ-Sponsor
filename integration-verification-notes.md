@@ -143,3 +143,7 @@ GitHub Pages 工作流程 `32048239623` 已成功完成。公開網址 `https://
 編輯器 DOM 包含 Angular 的 `__ngContext__`，但不是可直接逐項巡覽的陣列，首次檢查已安全失敗，未更動草稿。後續會改以物件鍵值方式辨識元件持有的編輯器或模型實例。
 
 後續檢查確認該節點的 Angular 上下文只保留數值索引，沒有可安全存取的元件執行個體；全域 `window.monaco` 與 AMD `require` 亦不可用。頁面確實載入 Monaco 相關腳本，但目前應改採控制台 UI 或以分段鍵盤輸入完成草稿。
+
+ODJ Backstage 已建立為獨立 GitHub Pages 網站 `https://larrylai777.github.io/ODJ-Backstage/`，以同一 Firebase 專案的管理員 UID 白名單與正式 Firestore 規則保護。後台已驗證採用卡片式介面讀取跨會員作品資料、狀態篩選、募集進度、透明度細節與審核操作。
+
+ODJ Sponsor 原始碼與 `gh-pages` 分支已移除內嵌 `/admin`、`/admin/reviews` 路由及工作台的內嵌審核入口；首次對舊公開網址的檢查仍取得 GitHub Pages 邊緣快取的舊版資產，待快取刷新後應重新確認舊網址不再提供審核介面。
