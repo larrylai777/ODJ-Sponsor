@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, FilePenLine, Heart, LogIn, PackageCheck, PenLine, Pencil, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, CircleUserRound, Heart, LogIn, PackageCheck, PenLine, Pencil, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { collection, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, where, type DocumentData } from "firebase/firestore";
 import { toast } from "sonner";
@@ -9,7 +9,6 @@ import SiteFooter from "@/components/SiteFooter";
 import { auth, db } from "@/lib/firebase";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { canDeleteProposal, canEditProposal, milestonePlan, proposalStatusLabel, type ProposalFormValues, type ProposalStatus } from "@/lib/proposalWorkflow";
-import { adminReviewPath, isPlatformAdmin } from "@/lib/adminAccess";
 
 /** 工作台採作品工作區，而非銷售後台：會員先儲存提案、設定支持金額與五項透明度，再送平台審核。 */
 
@@ -144,7 +143,6 @@ export default function Dashboard() {
 
       <section className="container py-12 sm:py-16"><div className="grid gap-6 lg:grid-cols-[.82fr_1.18fr]">
         <div className="space-y-6">
-          {isPlatformAdmin(user.uid) ? <Panel eyebrow="平台管理" title="待審作品" icon={<ShieldCheck size={20} />} action={<span className="text-sm font-semibold text-[#f36b3b]">ADMIN</span>}><p className="text-sm leading-7 text-[#6e6e73]">檢視所有會員送交審核的作品，確認透明度資訊後決定核准公開或退回補件。</p><a href={adminReviewPath} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#172846] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#243d67] active:scale-[0.97]"><FilePenLine size={17} /> 進入審核後台</a></Panel> : null}
           <Panel eyebrow="帳號" title="我的帳號" icon={<CircleUserRound size={20} />}><div className="space-y-3 text-sm"><div className="flex justify-between gap-4 border-b border-[#d2d2d7] pb-3"><span className="text-[#6e6e73]">登入方式</span><span className="font-semibold">Google</span></div><div className="flex justify-between gap-4"><span className="text-[#6e6e73]">會員識別</span><span className="max-w-[170px] truncate text-xs text-[#424245]" title={user.uid}>{user.uid}</span></div></div></Panel>
           <Panel eyebrow="創作者" title="建立作品" icon={<Sparkles size={20} />} action={<PenLine size={19} className="text-[#f36b3b]" />}><p className="text-sm leading-7 text-[#6e6e73]">以四個步驟建立私密草稿：作品資料、支持目標、透明度與送審。送交審核後，資料會鎖定直到平台要求補件。</p><a href={`${basePath}create`} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f36b3b] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#d9522d] active:scale-[0.97]"><Sparkles size={17} /> 建立新作品</a></Panel>
           <Panel eyebrow="平台規則" title="支持款如何管理" icon={<ShieldCheck size={20} />}><p className="text-sm leading-7 text-[#6e6e73]">老東家不是基金會；公開作品採平台代收、以作品為單位專款管理。實際付款與撥付尚未開放，本工作台先固定三期進度與透明度規則。</p><ol className="mt-5 space-y-3">{milestonePlan.map((milestone) => <li key={milestone.id} className="flex items-center justify-between gap-3 rounded-2xl bg-white px-4 py-3 text-sm"><span>{milestone.title}</span><span className="font-semibold text-[#f36b3b]">{milestone.percentage}%</span></li>)}</ol></Panel>
