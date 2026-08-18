@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">老東家晨光吊牌標籤</title>
+  <desc id="description">杏橘日出置於深靛色吊牌輪廓中的品牌圖示</desc>
+  <rect width="512" height="512" rx="112" fill="#FFF6E6"/>
+  <path d="M118 122h188l102 102v166c0 20-16 36-36 36H140c-20 0-36-16-36-36V158c0-20 16-36 36-36h-22Z" fill="#1E2748"/>
+  <path d="M306 122v70c0 18 14 32 32 32h70" fill="#FFF6E6"/>
+  <path d="M306 122l102 102" fill="none" stroke="#FFF6E6" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="182" cy="198" r="20" fill="#FFF6E6"/>
+  <path d="M166 320a90 90 0 0 1 180 0" fill="#FF8A38"/>
+  <path d="M144 320h224M166 352h180M196 384h120" fill="none" stroke="#F6B233" stroke-width="16" stroke-linecap="round"/>
+</svg>
