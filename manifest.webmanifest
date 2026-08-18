@@ -1,0 +1,16 @@
+{
+  "name": "老東家｜故事，等你落款",
+  "short_name": "老東家",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FFF6E6",
+  "theme_color": "#FFF6E6",
+  "icons": [
+    {
+      "src": "media/odj-tag-app-icon.png?v=20260818",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
